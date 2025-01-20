@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <title>Babylon.js sample code</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/smoothscroll/1.4.10/SmoothScroll.min.js"></script>
+    <!-- Babylon.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.6.2/dat.gui.min.js"></script>
+    <script src="https://assets.babylonjs.com/generated/Assets.js"></script>
+    <script src="https://cdn.babylonjs.com/recast.js"></script>
+    <script src="https://cdn.babylonjs.com/ammo.js"></script>
+    <script src="https://cdn.babylonjs.com/havok/HavokPhysics_umd.js"></script>
+    <script src="https://cdn.babylonjs.com/cannon.js"></script>
+    <script src="https://cdn.babylonjs.com/Oimo.js"></script>
+    <script src="https://cdn.babylonjs.com/earcut.min.js"></script>
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+    <script src="https://cdn.babylonjs.com/materialsLibrary/babylonjs.materials.min.js"></script>
+    <script src="https://cdn.babylonjs.com/proceduralTexturesLibrary/babylonjs.proceduralTextures.min.js"></script>
+    <script src="https://cdn.babylonjs.com/postProcessesLibrary/babylonjs.postProcess.min.js"></script>
+    <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.js"></script>
+    <script src="https://cdn.babylonjs.com/serializers/babylonjs.serializers.min.js"></script>
+    <script src="https://cdn.babylonjs.com/gui/babylon.gui.min.js"></script>
+    <script src="https://cdn.babylonjs.com/addons/babylonjs.addons.min.js"></script>
+    <script src="https://cdn.babylonjs.com/inspector/babylon.inspector.bundle.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Beiruti:wght@200..900&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <canvas id="renderCanvas" class="renderCanvas"> </canvas>
+      <div id="scrollDiv"></div>
+      <div id="cover">
+        <div id="coverTitleBox">
+          <h1>Text</h1>
+        </div>
+        <div id="coverScrollBox">scroll</div>
+      </div>
+      <div id="colors">
+        <div id="colorsUp">
+          <div id="colorLeft">
+            <div
+              class="colorChoice firstColor"
+              aria-valuetext="#896309"
+              style="background-image: url('img/OuterYellow.png')"
+            ></div>
+            <div
+              class="colorChoice firstColor"
+              aria-valuetext="#8e8a76"
+              style="background-image: url('img/OuterWhite.png')"
+            ></div>
+            <div
+              class="colorChoice firstColor"
+              aria-valuetext="#242424"
+              style="background-image: url('img/OuterGrey.png')"
+            ></div>
+            <div
+              class="colorChoice firstColor"
+              aria-valuetext="#010101"
+              style="background-image: url('img/OuterBlack.png')"
+            ></div>
+            <div id="arrow">
+              <img src="img/icons8-arrow-up-30.png" alt="arrow" />
+            </div>
+          </div>
+          <div id="colorRight">
+            <!-- <div id="arrow">open</div> -->
+            <div
+              class="colorChoice secundColor"
+              aria-valuetext="#896309"
+              style="background-image: url('img/InnerYellow.png')"
+            ></div>
+            <div
+              class="colorChoice secundColor"
+              aria-valuetext="#8e8a76"
+              style="background-image: url('img/InnerBeige.png')"
+            ></div>
+            <div
+              class="colorChoice secundColor"
+              aria-valuetext="#242424"
+              style="background-image: url('img/InnerGrey.png')"
+            ></div>
+            <div
+              class="colorChoice secundColor"
+              aria-valuetext="#010101"
+              style="background-image: url('img/InnerBlack.png')"
+            ></div>
+            <div id="arrow">
+              <img src="img/icons8-arrow-up-30.png" alt="arrow" />
+            </div>
+          </div>
+          <div id="textile">
+            <!-- <div id="arrow">open</div> -->
+            <div
+              class="colorChoice textilePick"
+              aria-valuetext="Tekstil"
+              style="background-image: url('img/Tekstil.png')"
+            ></div>
+
+            <div
+              class="colorChoice textilePick"
+              aria-valuetext="Linije"
+              style="background-image: url('img/Linije.png')"
+            ></div>
+            <div id="arrow">
+              <img src="img/icons8-arrow-up-30.png" alt="arrow" />
+            </div>
+          </div>
+        </div>
+        <div id="colorsDown">
+          <div id="choiceTextBox">
+            <div class="choiceText">OUTER COLORS</div>
+            <div class="choiceText">INNER COLORS</div>
+            <div class="choiceText">TEXTILE</div>
+          </div>
+          <div id="choiceTitle">
+            <h3>CUSTOMIZE MATERIALS</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="main.js"></script>
+  </body>
+</html>
