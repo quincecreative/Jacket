@@ -88,6 +88,8 @@ var createScene = function () {
   let firstColorPicked = "#896309";
   let secundColorPicked = "#8e8a76";
   let textilePicked = "Linije";
+  let video = document.getElementById("video1");
+  // setTimeout(video.play(), 3000);
 
   for (let i = 0; i < colorChoice.length; i++) {
     colorChoice[i].style.display = "none";
@@ -196,7 +198,7 @@ var createScene = function () {
     }
   }
 
-  let shadowTextureLine = new BABYLON.Texture("img/Shadows9(Linije)Small.jpg", scene);
+  let shadowTextureLine = new BABYLON.Texture("img/Shadows10(Linije)2k.jpg", scene);
 
   shadowTextureLine.uOffset = 0;
   shadowTextureLine.vOffset = 0;
@@ -204,7 +206,7 @@ var createScene = function () {
   shadowTextureLine.vScale = -1;
 
   // shadowTextureLine.uAng = 10;
-  let shadowTextureKnit = new BABYLON.Texture("img/Shadows9(Тekstil)Light(Small).jpg", scene);
+  let shadowTextureKnit = new BABYLON.Texture("img/Shadows10(Textile)2k.jpg", scene);
 
   shadowTextureKnit.uOffset = 0;
   shadowTextureKnit.vOffset = 0;
@@ -217,9 +219,7 @@ var createScene = function () {
   textMat.diffuseColor = new BABYLON.Color3.FromHexString("#E9FF46");
 
   async function makeText() {
-    var fontData = await (
-      await fetch("https://assets.babylonjs.com/fonts/Droid Sans_Regular.json")
-    ).json();
+    let fontData = await (await fetch("Nunito_Regular.json")).json();
     let myText = BABYLON.MeshBuilder.CreateText("myText", "P R O D U C E R S", fontData, {
       size: 0.4,
       resolution: 64,
@@ -253,8 +253,8 @@ var createScene = function () {
     let jakna = result.meshes[0];
     // console.log(result.meshes);
     jakna.scaling = new BABYLON.Vector3(-4, 4, 4);
-    jakna.position = new BABYLON.Vector3(0, -5, 0);
-    jakna.rotation = new BABYLON.Vector3(-0.3, 0.2, -0.1);
+    jakna.position = new BABYLON.Vector3(1, -5, 0);
+    jakna.rotation = new BABYLON.Vector3(-0.3, 0.2, 0.1);
     // console.log(result.meshes[4].material.albedoColor);
     for (let i = 1; i < result.meshes.length; i++) {
       // console.log(result.meshes[i].material);
@@ -294,12 +294,14 @@ var createScene = function () {
     // lineBumpTexture.vScale = 3;
     let lineBumpTexture = result.meshes[3].material.bumpTexture;
 
-    let knitBumpTexture = new BABYLON.Texture("img/Knit_Ponte_Jersey_NRM.jpg", scene);
+    let knitBumpTexture = new BABYLON.Texture("img/fabric_129_normal-2K.jpg", scene);
 
     knitBumpTexture.uOffset = 0;
     knitBumpTexture.vOffset = 0;
-    knitBumpTexture.uScale = 9;
-    knitBumpTexture.vScale = 9;
+    knitBumpTexture.uScale = 20;
+    knitBumpTexture.vScale = 20;
+    result.meshes[3].material.bumpTexture.level = 1;
+    result.meshes[4].material.bumpTexture.level = 1;
 
     for (let i = 0; i < colorChoice.length; i++) {
       if (colorChoice[i].classList[1] == "secundColor") {
@@ -406,6 +408,13 @@ var createScene = function () {
       // };
     });
   });
+
+  let defaultRendering = new BABYLON.DefaultRenderingPipeline("defRend", true, scene);
+
+  defaultRendering.fxaaEnabled = true;
+  defaultRendering.samples = 20;
+
+  console.log(defaultRendering);
 
   // Our built-in 'ground' shape.
 
