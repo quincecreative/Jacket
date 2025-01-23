@@ -38,7 +38,6 @@ var createScene = function () {
   // scene.debugLayer.show({
   //   embedMode: true,
   // });
-  // var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 3, 6), scene);
 
   // This targets the camera to scene origin
   camera.setTarget(BABYLON.Vector3.Zero());
@@ -46,10 +45,13 @@ var createScene = function () {
   // This attaches the camera to the canvas
   camera.attachControl(canvas, true);
 
-  const hdrTexture = BABYLON.CubeTexture.CreateFromPrefilteredData("003.env", scene);
-  hdrTexture.rotationY = -0.2;
+  const hdrTexture = BABYLON.CubeTexture.CreateFromPrefilteredData(
+    "https://assets.babylonjs.com/environments/environmentSpecular.env",
+    scene
+  );
+  // hdrTexture.rotationY = -0.2;
 
-  scene.environmentIntensity = 1;
+  scene.environmentIntensity = 2;
 
   scene.environmentTexture = hdrTexture;
 
@@ -71,7 +73,7 @@ var createScene = function () {
     scene
   );
   lightUp.position = new BABYLON.Vector3(0, 5, -2);
-  lightUp.intensity = 7;
+  lightUp.intensity = 0;
 
   //fountain to be emmietr for clouds-particles
 
@@ -89,11 +91,60 @@ var createScene = function () {
   let secundColorPicked = "#8e8a76";
   let textilePicked = "Linije";
   let video = document.getElementById("video1");
-  // setTimeout(video.play(), 3000);
 
   for (let i = 0; i < colorChoice.length; i++) {
     colorChoice[i].style.display = "none";
   }
+  //////
+
+  colorLeft.style.height = "100%";
+  for (let i = 0; i < firstColor.length; i++) {
+    firstColor[i].style.display = "flex";
+    firstColor[i].style.transition = "all 0.2s ease-in-out";
+  }
+  setTimeout(function () {
+    colorLeft.style.height = "35%";
+    for (let i = 0; i < firstColor.length; i++) {
+      if (firstColor[i].ariaValueText == firstColorPicked) {
+        firstColor[i].style.display = "flex";
+        firstColor[i].style.height = "8dvh";
+      } else {
+        firstColor[i].style.display = "none";
+      }
+    }
+  }, 1000);
+
+  colorRight.style.height = "100%";
+  for (let i = 0; i < secundColor.length; i++) {
+    secundColor[i].style.display = "flex";
+  }
+  setTimeout(function () {
+    colorRight.style.height = "35%";
+    for (let i = 0; i < secundColor.length; i++) {
+      if (secundColor[i].ariaValueText == secundColorPicked) {
+        secundColor[i].style.display = "flex";
+      } else {
+        secundColor[i].style.display = "none";
+      }
+    }
+  }, 1000);
+
+  textile.style.height = "60%";
+  for (let i = 0; i < textilePick.length; i++) {
+    textilePick[i].style.display = "flex";
+  }
+  setTimeout(function () {
+    textile.style.height = "35%";
+    for (let i = 0; i < textilePick.length; i++) {
+      if (textilePick[i].ariaValueText == textilePicked) {
+        textilePick[i].style.display = "flex";
+      } else {
+        textilePick[i].style.display = "none";
+      }
+    }
+  }, 1000);
+
+  /////////////
 
   colorLeft.addEventListener("mouseover", function () {
     colorLeft.style.height = "100%";
@@ -108,7 +159,7 @@ var createScene = function () {
     for (let i = 0; i < firstColor.length; i++) {
       if (firstColor[i].ariaValueText == firstColorPicked) {
         firstColor[i].style.display = "flex";
-        firstColor[i].style.height = "6dvh";
+        firstColor[i].style.height = "8dvh";
       } else {
         firstColor[i].style.display = "none";
       }
@@ -150,29 +201,6 @@ var createScene = function () {
       }
     }
   });
-  //   let opened = false;
-  //   document.getElementById("arrow").addEventListener("click", function () {
-  //     if (!opened) {
-  //       document.getElementById("arrow").innerText = "close";
-  //       colorRight.style.height = "85%";
-  //       for (let i = 0; i < secundColor.length; i++) {
-  //         secundColor[i].style.display = "flex";
-  //       }
-  //       opened = true;
-  //     } else {
-  //       document.getElementById("arrow").innerText = "open";
-  //       colorRight.style.height = "35%";
-
-  //       for (let i = 0; i < secundColor.length; i++) {
-  //         if (secundColor[i].ariaValueText == secundColorPicked) {
-  //           secundColor[i].style.display = "flex";
-  //         } else {
-  //           secundColor[i].style.display = "none";
-  //         }
-  //       }
-  //       opened = false;
-  //     }
-  //   });
 
   for (let i = 0; i < firstColor.length; i++) {
     if (firstColor[i].ariaValueText == firstColorPicked) {
@@ -246,45 +274,51 @@ var createScene = function () {
     // myText.visibility = 0.6;
     // myText1.material.alpha = 0.6;
   }
-  makeText();
+  // makeText();
 
-  BABYLON.SceneLoader.ImportMeshAsync("", "", "Jakna5(sa svetlima).glb").then((result) => {
-    // console.log("slo");
+  BABYLON.SceneLoader.ImportMeshAsync("", "", "Jakna Camera 3.glb").then((result) => {
     let jakna = result.meshes[0];
-    // console.log(result.meshes);
+    console.log(result);
+
     jakna.scaling = new BABYLON.Vector3(-4, 4, 4);
     jakna.position = new BABYLON.Vector3(1, -5, 0);
-    jakna.rotation = new BABYLON.Vector3(-0.3, 0.2, 0.1);
-    // console.log(result.meshes[4].material.albedoColor);
-    for (let i = 1; i < result.meshes.length; i++) {
-      // console.log(result.meshes[i].material);
-      result.meshes[i].material.ambientTexture = shadowTextureLine;
-      // result.meshes[i].material.ambientStrenght = 1;
+    jakna.rotation = new BABYLON.Vector3(-0.4, 0.2, 0.2);
 
-      // result.meshes[i].material._useLightmapAsShadowmap = true;
-      // light.excludedMeshes.push(result.meshes[i]);
+    for (let i = 1; i < result.meshes.length; i++) {
+      result.meshes[i].material.ambientTexture = shadowTextureLine;
+
       lightHL.excludedMeshes.push(result.meshes[i]);
       result.meshes[i].material.metallicF0Factor = 0.5;
     }
-    // result.meshes[3].material.albedoColor = new BABYLON.Color3.FromHexString("#c4c1b4");
-    // console.log(result.meshes[3].material.albedoColor);
 
-    // torba.rotationQuaternion = null;
-    // if (window.innerWidth > window.innerHeight) {
-    //   scene.activeCamera = scene.cameras[1];
-    // } else {
-    //   scene.activeCamera = scene.cameras[2];
-    //   scene.activeCamera.position.z = 0.3;
-    //   scene.activeCamera.position.y = 0.01;
+    jakna.rotationQuaternion = null;
+    if (window.innerWidth > window.innerHeight) {
+      scene.activeCamera = scene.cameras[1];
+    } else {
+      scene.activeCamera = scene.cameras[1];
+      // scene.activeCamera.position.z = 0.3;
+      // scene.activeCamera.position.y = 0.01;
+    }
+
+    scene.activeCamera.attachControl(canvas, true);
+
+    // scene.animationGroups.find((a) => a.name === "CameraAction").play(true);
+    // scene.animationGroups.find((a) => a.name === "CameraAction").scene = scene;
+    // console.log(scene.animationGroups.find((a) => a.name === "CameraAction"));
+    // for (
+    //   let i = 0;
+    //   i < scene.animationGroups.find((a) => a.name === "CameraAction")._targetedAnimations.length;
+    //   i++
+    // ) {
+    //   scene.animationGroups.find((a) => a.name === "CameraAction")._targetedAnimations[i].target =
+    //     camera;
     // }
+    console.log(scene.animationGroups.find((a) => a.name === "CameraAction"));
 
-    // scene.activeCamera.attachControl(canvas, true);
+    console.log(camera);
+    console.log(scene.cameras[1]);
 
-    // scene.animationGroups.find((a) => a.name === "teloAction.001").stop(true, 1, 0);
-
-    //             scene.animationGroups
-    // .find((a) => a.name === "CameraAction")
-    // .play(true);
+    scene.animationGroups.find((a) => a.name === "CameraAction").play(true);
 
     // let lineBumpTexture = new BABYLON.Texture("img/InnerColor(Stripes) (Normal).png", scene);
 
@@ -300,8 +334,14 @@ var createScene = function () {
     knitBumpTexture.vOffset = 0;
     knitBumpTexture.uScale = 20;
     knitBumpTexture.vScale = 20;
+    console.log(result.meshes[3].material);
+    result.meshes[3].material._metallicTexture = null;
+    result.meshes[4].material._metallicTexture = null;
+
     result.meshes[3].material.bumpTexture.level = 1;
     result.meshes[4].material.bumpTexture.level = 1;
+    result.meshes[3].material.ambientTexture.level = 1.2;
+    result.meshes[4].material.ambientTexture.level = 1.2;
 
     for (let i = 0; i < colorChoice.length; i++) {
       if (colorChoice[i].classList[1] == "secundColor") {
@@ -326,6 +366,10 @@ var createScene = function () {
           if (textilePicked == "Tekstil") {
             result.meshes[3].material.bumpTexture = knitBumpTexture;
             result.meshes[4].material.bumpTexture = knitBumpTexture;
+            // result.meshes[3].material._metallicTexture = knitBumpTexture;
+            // result.meshes[4].material._metallicTexture = knitBumpTexture;
+            // result.meshes[3].material._metallicTexture.level = 0.01;
+            // result.meshes[4].material._metallicTexture.level = 0.01;
             for (let i = 1; i < result.meshes.length; i++) {
               result.meshes[i].material.ambientTexture = shadowTextureKnit;
               // result.meshes[i].material._useLightmapAsShadowmap = true;
@@ -352,6 +396,8 @@ var createScene = function () {
 
     let cover = document.getElementById("cover");
 
+    let bigText = document.getElementsByClassName("BigText");
+
     window.addEventListener("scroll", () => {
       const currentScroll = window.pageYOffset;
       newValue = window.pageYOffset;
@@ -377,44 +423,66 @@ var createScene = function () {
         }
       }
 
-      // scene.beforeRender = function () {
-      //   if (
-      //     window.innerWidth < window.innerHeight &&
-      //     currentScroll < 7100 &&
-      //     currentScroll > 3000
-      //   ) {
-      //     scene.activeCamera.position.z = currentScroll / 10000;
-      //   }
-      //   if (oldValue < newValue) {
-      //     frame = currentScroll / 15.88;
-      //     jakna.position.y = -(currentScroll * 0.0001);
-      //     if (currentScroll < 100) {
-      //       scene.animationGroups.find((a) => a.name === "teloAction.001").start(false, 1, 0);
-      //     }
-      //   } else if (oldValue > newValue) {
-      //     frame = currentScroll / 15.88;
-      //     jakna.position.y = -(currentScroll * 0.0001);
-      //   }
-      //   oldValue = newValue;
-      //   if (window.innerWidth > window.innerHeight) {
-      //     scene.animationGroups.find((a) => a.name === "CameraAction").play(true);
-      //     scene.animationGroups.find((a) => a.name === "CameraAction").goToFrame(frame);
-      //     scene.animationGroups.find((a) => a.name === "CameraAction").pause();
-      //   } else {
-      //     scene.animationGroups.find((a) => a.name === "CameraAction.002").play(true);
-      //     scene.animationGroups.find((a) => a.name === "CameraAction.002").goToFrame(frame);
-      //     scene.animationGroups.find((a) => a.name === "CameraAction.002").pause();
-      //   }
-      // };
+      for (let i = 0; i < bigText.length; i++) {
+        if (currentScroll > 500 && currentScroll < 800) {
+          bigText[i].style.opacity = 1 - (currentScroll - 500) / 300;
+        } else if (currentScroll > 800) {
+          bigText[i].style.opacity = 0;
+        } else if (currentScroll <= 300) {
+          bigText[i].style.opacity = currentScroll / 300;
+        } else if (currentScroll > 300 && currentScroll < 500) {
+          bigText[i].style.opacity = 1;
+        }
+      }
+
+      if (currentScroll > 800 && currentScroll < 8000) {
+        canvas.style.backgroundSize = 1920 + (currentScroll - 800) / 3 + "px";
+        canvas.style.backgroundPositionX = -((currentScroll - 800) / 6) + "px";
+        canvas.style.backgroundPositionY = -((currentScroll - 800) / 6) + "px";
+      } else if (currentScroll > 8000 && currentScroll < 12960) {
+        canvas.style.backgroundSize = 4320 - (currentScroll - 8000) / 3 + "px";
+        canvas.style.backgroundPositionX = -1200 + (currentScroll - 8000) / 6 + "px";
+        canvas.style.backgroundPositionY = -1200 + (currentScroll - 8000) / 6 + "px";
+      }
+
+      scene.beforeRender = function () {
+        if (
+          window.innerWidth < window.innerHeight &&
+          currentScroll < 7100 &&
+          currentScroll > 3000
+        ) {
+          scene.activeCamera.position.z = currentScroll / 10000;
+        }
+        if (oldValue < newValue) {
+          frame = currentScroll / 15.88;
+          jakna.position.y = -(currentScroll * 0.0001);
+          // if (currentScroll < 100) {
+          //   scene.animationGroups.find((a) => a.name === "teloAction.001").start(false, 1, 0);
+          // }
+        } else if (oldValue > newValue) {
+          frame = currentScroll / 15.88;
+          jakna.position.y = -(currentScroll * 0.0001);
+        }
+        oldValue = newValue;
+        if (window.innerWidth > window.innerHeight) {
+          scene.animationGroups.find((a) => a.name === "CameraAction").play(true);
+          scene.animationGroups.find((a) => a.name === "CameraAction").goToFrame(frame);
+          scene.animationGroups.find((a) => a.name === "CameraAction").pause();
+        } else {
+          // scene.animationGroups.find((a) => a.name === "CameraAction.002").play(true);
+          // scene.animationGroups.find((a) => a.name === "CameraAction.002").goToFrame(frame);
+          // scene.animationGroups.find((a) => a.name === "CameraAction.002").pause();
+        }
+      };
     });
   });
 
-  let defaultRendering = new BABYLON.DefaultRenderingPipeline("defRend", true, scene);
+  // let defaultRendering = new BABYLON.DefaultRenderingPipeline("defRend", true, scene);
 
-  defaultRendering.fxaaEnabled = true;
-  defaultRendering.samples = 20;
+  // defaultRendering.fxaaEnabled = true;
+  // defaultRendering.samples = 20;
 
-  console.log(defaultRendering);
+  // console.log(defaultRendering);
 
   // Our built-in 'ground' shape.
 

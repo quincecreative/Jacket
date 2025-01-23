@@ -83,7 +83,8 @@ body::-webkit-scrollbar {
   background: linear-gradient(0deg, rgba(214, 227, 228, 1) 15%, rgba(108, 135, 136, 1) 100%); */
   background-image: url("img/BG.webp");
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: 1920px;
+  background-position: 0 0;
   width: 100vw;
   height: 100vh;
   float: left;
@@ -109,11 +110,11 @@ body::-webkit-scrollbar {
 
 #colors {
   width: 18dvw;
-  height: 40dvh;
+  height: 45dvh;
   background-color: rgba(255, 255, 255, 0);
   position: fixed;
   left: 7dvw;
-  top: 55dvh;
+  top: 50dvh;
   z-index: 100;
   display: flex;
   flex-direction: column;
@@ -123,7 +124,7 @@ body::-webkit-scrollbar {
 
 #colorsUp {
   width: 100%;
-  height: 80%;
+  height: 85%;
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
@@ -132,7 +133,7 @@ body::-webkit-scrollbar {
 
 #colorsDown {
   width: 100%;
-  height: 20%;
+  height: 15%;
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
@@ -174,7 +175,7 @@ body::-webkit-scrollbar {
   /* border-start-end-radius: 20%;
   border-start-start-radius: 20%; */
   border-radius: 10%;
-  background-color: rgba(175, 173, 173, 0.313);
+  background-color: rgba(175, 173, 173, 0);
   width: 30%;
   height: 35%;
   display: flex;
@@ -189,7 +190,7 @@ body::-webkit-scrollbar {
   /* border-top-right-radius: 10%;
   border-top-left-radius: 20%; */
   border-radius: 10%;
-  background-color: rgba(175, 173, 173, 0.313);
+  background-color: rgba(175, 173, 173, 0);
   width: 30%;
   height: 35%;
   display: flex;
@@ -204,7 +205,7 @@ body::-webkit-scrollbar {
   /* border-top-right-radius: 10%;
     border-top-left-radius: 20%; */
   border-radius: 10%;
-  background-color: rgba(175, 173, 173, 0.313);
+  background-color: rgba(175, 173, 173, 0);
   width: 30%;
   height: 35%;
   display: flex;
@@ -215,9 +216,10 @@ body::-webkit-scrollbar {
   padding: 0.5dvh 0;
 }
 
-.colorChoice {
-  width: 3.2dvw;
-  height: 6dvh;
+.circle {
+  filter: brightness(1.1);
+  width: 70%;
+  height: 80%;
   border-radius: 50%;
   display: flex;
   background-size: 100% 100%;
@@ -226,6 +228,23 @@ body::-webkit-scrollbar {
   -webkit-box-shadow: inset 0px -39px 19px -31px rgba(0, 0, 0, 0.64);
   -moz-box-shadow: inset 0px -39px 19px -31px rgba(0, 0, 0, 0.64);
   box-shadow: inset 0px -39px 19px -31px rgba(0, 0, 0, 0.64);
+}
+
+.colorChoice {
+  width: 5dvw;
+  height: 8dvh;
+  background-color: rgba(255, 255, 255, 0);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.shadow {
+  width: 75%;
+  height: 20%;
+  background: radial-gradient(rgba(85, 85, 85, 0.43), rgba(130, 130, 130, 0) 72%);
+  border-radius: 50%;
 }
 
 #arrow {
@@ -245,3 +264,41 @@ body::-webkit-scrollbar {
   height: 5dvh;
   margin: 0.2dvh 0;
 } */
+
+#creators {
+  width: 25dvw;
+  height: 10dvh;
+  background-color: rgba(240, 248, 255, 0);
+  color: #e9ff466f;
+  font-family: "Beiruti", serif;
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.4em;
+  font-weight: 200;
+  top: 40dvh;
+  left: 4dvw;
+  z-index: 1;
+  letter-spacing: 15px;
+  opacity: 1;
+}
+
+#producers {
+  width: 40dvw;
+  height: 20dvh;
+  background-color: rgba(240, 248, 255, 0);
+  color: #e9ff466f;
+  font-family: "Beiruti", serif;
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 5em;
+  font-weight: 400;
+  top: 60dvh;
+  left: 60dvw;
+  z-index: 1;
+  letter-spacing: 25px;
+  opacity: 1;
+}
