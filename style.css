@@ -243,7 +243,10 @@ body::-webkit-scrollbar {
 .shadow {
   width: 75%;
   height: 20%;
-  background: radial-gradient(rgba(85, 85, 85, 0.43), rgba(130, 130, 130, 0) 72%);
+  background: radial-gradient(
+    rgba(85, 85, 85, 0.43),
+    rgba(130, 130, 130, 0) 72%
+  );
   border-radius: 50%;
 }
 
@@ -300,5 +303,31 @@ body::-webkit-scrollbar {
   left: 60dvw;
   z-index: 1;
   letter-spacing: 25px;
+  opacity: 1;
+}
+
+#frameAndText {
+  position: fixed;
+  top: 20dvh;
+  left: 60dvw;
+  height: 15dvh;
+  width: 30dvw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  opacity: 0;
+}
+
+#arc {
+  position: fixed;
+  top: 40dvh;
+  left: 40dvw;
+  height: 15dvh;
+  width: 20dvw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
   opacity: 1;
 }

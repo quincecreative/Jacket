@@ -99,6 +99,8 @@ var createScene = function () {
   let secundColorPicked = "#8e8a76";
   let textilePicked = "Linije";
   let video = document.getElementById("video1");
+  let frameAndText = document.getElementById("frameAndText");
+  let arc = document.getElementById("arc");
 
   for (let i = 0; i < colorChoice.length; i++) {
     colorChoice[i].style.display = "none";
@@ -304,6 +306,7 @@ var createScene = function () {
     (result) => {
       let jakna = result.meshes[0];
       console.log(result);
+      let jakna1 = result.meshes[3]._parentNode;
 
       jakna.scaling = new BABYLON.Vector3(-4, 4, 4);
       jakna.position = new BABYLON.Vector3(1, -5, 0);
@@ -429,7 +432,7 @@ var createScene = function () {
         newPosition = scene.activeCamera.globalPosition.clone();
         lastPosition = scene.activeCamera.globalPosition.clone();
       }, 1000);
-      canvas.style.backgroundSize = "1930px";
+      canvas.style.backgroundSize = "1920px";
       console.log(
         Number(
           canvas.style.backgroundSize.slice(
@@ -438,7 +441,82 @@ var createScene = function () {
           )
         )
       );
-      let positionBackground = 1930;
+
+      let rotating = false;
+      let beislineX = jakna1._rotationQuaternion.x;
+      let beislineY = jakna1._rotationQuaternion.y;
+      let beislineZ = jakna1._rotationQuaternion.z;
+      let beislineW = jakna1._rotationQuaternion.w;
+
+      ////////////////////////////////
+      scene.onBeforeRenderObservable.add(() => {
+        if (!rotating) {
+          arc.style.display = "none";
+          if (jakna1._rotationQuaternion.x > beislineX) {
+            jakna1._rotationQuaternion.x -= 0.001;
+          } else if (jakna1._rotationQuaternion.x < beislineX) {
+            jakna1._rotationQuaternion.x += 0.001;
+          }
+          if (jakna1._rotationQuaternion.y > beislineY) {
+            jakna1._rotationQuaternion.y -= 0.001;
+          } else if (jakna1._rotationQuaternion.y < beislineY) {
+            jakna1._rotationQuaternion.y += 0.001;
+          }
+          if (jakna1._rotationQuaternion.z > beislineZ) {
+            jakna1._rotationQuaternion.z -= 0.001;
+          } else if (jakna1._rotationQuaternion.z < beislineZ) {
+            jakna1._rotationQuaternion.z += 0.001;
+          }
+          if (jakna1._rotationQuaternion.w > beislineW) {
+            jakna1._rotationQuaternion.w -= 0.001;
+          } else if (jakna1._rotationQuaternion.w < beislineW) {
+            jakna1._rotationQuaternion.w += 0.001;
+          }
+        }
+      });
+
+      ///////////////////////////////
+
+      const rightDir = new BABYLON.Vector3();
+      const upDir = new BABYLON.Vector3();
+      const sensitivity = 0.002;
+      arc.style.display = "none";
+
+      scene.onPointerObservable.add((pointerInfo) => {
+        if (pointerInfo.type === 1) {
+          scene.activeCamera.detachControl();
+          if (pointerInfo.pickInfo.pickedMesh._parentNode.id === "Default") {
+            if (pointerInfo.type === 1) {
+              rotating = true;
+              arc.style.display = "flex";
+            }
+          }
+        } else if (pointerInfo.type === 2 && rotating) {
+          rotating = false;
+          scene.activeCamera.attachControl();
+        } else if (pointerInfo.type === 4 && rotating) {
+          const matrix = scene.activeCamera.getWorldMatrix();
+
+          rightDir.copyFromFloats(matrix.m[0], matrix.m[1], matrix.m[2]);
+          upDir.copyFromFloats(matrix.m[4], matrix.m[5], matrix.m[6]);
+
+          // jakna1.rotateAround(
+          //   jakna1.position,
+          //   rightDir,
+          //   pointerInfo.event.movementY * -1 * sensitivity
+          // );
+          // let movment = pointerInfo.event.movementX * 1 * sensitivity;
+          // console.log(movment);
+          jakna1.rotateAround(
+            jakna1.position,
+            upDir,
+            pointerInfo.event.movementX * 1 * sensitivity
+          );
+        }
+      });
+
+      //////////////////////
+      let positionBackground = 1920;
       let positionBackgroundY = 0;
       let positionBackgroundX = 0;
 
@@ -458,12 +536,18 @@ var createScene = function () {
             //   colorChoice[i].style.display = "flex";
             // }
             cover.style.opacity = 1 - currentScroll / 300;
+            if (cover.style.opacity > 0) {
+              cover.style.display = "flex";
+            }
           } else {
             // colorChoice[i].style.opacity = 1;
             colorsDown.style.opacity = 1;
             colorsUp.style.opacity = 1;
 
             cover.style.opacity = 0;
+            if (cover.style.opacity == 0) {
+              cover.style.display = "none";
+            }
           }
         }
 
@@ -504,6 +588,20 @@ var createScene = function () {
         //   canvas.style.backgroundPositionY = positionBackgroundY + "px";
         //   console.log(positionBackgroundY);
         // }
+
+        if (currentScroll > 500 && currentScroll < 800) {
+          frameAndText.style.opacity = 1 - (currentScroll - 500) / 300;
+          arc.style.opacity = 1 - (currentScroll - 500) / 300;
+        } else if (currentScroll > 800) {
+          frameAndText.style.opacity = 0;
+          arc.style.opacity = 0;
+        } else if (currentScroll <= 300) {
+          frameAndText.style.opacity = currentScroll / 300;
+          arc.style.opacity = currentScroll / 300;
+        } else if (currentScroll > 300 && currentScroll < 500) {
+          frameAndText.style.opacity = 1;
+          arc.style.opacity = 1;
+        }
 
         for (let i = 0; i < bigText.length; i++) {
           if (currentScroll > 500 && currentScroll < 800) {
