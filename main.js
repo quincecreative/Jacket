@@ -56,12 +56,20 @@ var createScene = function () {
   scene.environmentTexture = hdrTexture;
 
   // This creates a light, aiming 0,1,0 - to the sky (non-mesh)
-  let light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+  let light = new BABYLON.HemisphericLight(
+    "light",
+    new BABYLON.Vector3(0, 1, 0),
+    scene
+  );
 
   // // Default intensity is 1. Let's dim the light a small amount
   light.intensity = 0;
 
-  let lightHL = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+  let lightHL = new BABYLON.HemisphericLight(
+    "light",
+    new BABYLON.Vector3(0, 1, 0),
+    scene
+  );
 
   // // Default intensity is 1. Let's dim the light a small amount
   lightHL.intensity = 2;
@@ -226,7 +234,10 @@ var createScene = function () {
     }
   }
 
-  let shadowTextureLine = new BABYLON.Texture("img/Shadows10(Linije)2k.jpg", scene);
+  let shadowTextureLine = new BABYLON.Texture(
+    "img/Shadows10(Linije)2k.jpg",
+    scene
+  );
 
   shadowTextureLine.uOffset = 0;
   shadowTextureLine.vOffset = 0;
@@ -234,7 +245,10 @@ var createScene = function () {
   shadowTextureLine.vScale = -1;
 
   // shadowTextureLine.uAng = 10;
-  let shadowTextureKnit = new BABYLON.Texture("img/Shadows10(Textile)2k.jpg", scene);
+  let shadowTextureKnit = new BABYLON.Texture(
+    "img/Shadows10(Textile)2k.jpg",
+    scene
+  );
 
   shadowTextureKnit.uOffset = 0;
   shadowTextureKnit.vOffset = 0;
@@ -248,20 +262,30 @@ var createScene = function () {
 
   async function makeText() {
     let fontData = await (await fetch("Nunito_Regular.json")).json();
-    let myText = BABYLON.MeshBuilder.CreateText("myText", "P R O D U C E R S", fontData, {
-      size: 0.4,
-      resolution: 64,
-      depth: 0.01,
-    });
+    let myText = BABYLON.MeshBuilder.CreateText(
+      "myText",
+      "P R O D U C E R S",
+      fontData,
+      {
+        size: 0.4,
+        resolution: 64,
+        depth: 0.01,
+      }
+    );
 
     myText.position = new BABYLON.Vector3(-4, -2, 1);
     myText.rotation = new BABYLON.Vector3(0.4, Math.PI, 0);
 
-    let myText1 = BABYLON.MeshBuilder.CreateText("myText", "W E ' R E  C R E A T O R S", fontData, {
-      size: 0.2,
-      resolution: 64,
-      depth: 0.01,
-    });
+    let myText1 = BABYLON.MeshBuilder.CreateText(
+      "myText",
+      "W E ' R E  C R E A T O R S",
+      fontData,
+      {
+        size: 0.2,
+        resolution: 64,
+        depth: 0.01,
+      }
+    );
 
     myText1.position = new BABYLON.Vector3(4, 1, 2);
     myText1.rotation = new BABYLON.Vector3(0.4, Math.PI, 0);
@@ -276,206 +300,277 @@ var createScene = function () {
   }
   // makeText();
 
-  BABYLON.SceneLoader.ImportMeshAsync("", "", "Jakna Camera 3.glb").then((result) => {
-    let jakna = result.meshes[0];
-    console.log(result);
+  BABYLON.SceneLoader.ImportMeshAsync("", "", "Jakna Camera 3.glb").then(
+    (result) => {
+      let jakna = result.meshes[0];
+      console.log(result);
 
-    jakna.scaling = new BABYLON.Vector3(-4, 4, 4);
-    jakna.position = new BABYLON.Vector3(1, -5, 0);
-    jakna.rotation = new BABYLON.Vector3(-0.4, 0.2, 0.2);
+      jakna.scaling = new BABYLON.Vector3(-4, 4, 4);
+      jakna.position = new BABYLON.Vector3(1, -5, 0);
+      jakna.rotation = new BABYLON.Vector3(-0.4, 0.2, 0.2);
 
-    for (let i = 1; i < result.meshes.length; i++) {
-      result.meshes[i].material.ambientTexture = shadowTextureLine;
+      for (let i = 1; i < result.meshes.length; i++) {
+        result.meshes[i].material.ambientTexture = shadowTextureLine;
 
-      lightHL.excludedMeshes.push(result.meshes[i]);
-      result.meshes[i].material.metallicF0Factor = 0.5;
-    }
-
-    jakna.rotationQuaternion = null;
-    if (window.innerWidth > window.innerHeight) {
-      scene.activeCamera = scene.cameras[1];
-    } else {
-      scene.activeCamera = scene.cameras[1];
-      // scene.activeCamera.position.z = 0.3;
-      // scene.activeCamera.position.y = 0.01;
-    }
-
-    scene.activeCamera.attachControl(canvas, true);
-
-    // scene.animationGroups.find((a) => a.name === "CameraAction").play(true);
-    // scene.animationGroups.find((a) => a.name === "CameraAction").scene = scene;
-    // console.log(scene.animationGroups.find((a) => a.name === "CameraAction"));
-    // for (
-    //   let i = 0;
-    //   i < scene.animationGroups.find((a) => a.name === "CameraAction")._targetedAnimations.length;
-    //   i++
-    // ) {
-    //   scene.animationGroups.find((a) => a.name === "CameraAction")._targetedAnimations[i].target =
-    //     camera;
-    // }
-    console.log(scene.animationGroups.find((a) => a.name === "CameraAction"));
-
-    console.log(camera);
-    console.log(scene.cameras[1]);
-
-    scene.animationGroups.find((a) => a.name === "CameraAction").play(true);
-
-    // let lineBumpTexture = new BABYLON.Texture("img/InnerColor(Stripes) (Normal).png", scene);
-
-    // lineBumpTexture.uOffset = 0;
-    // lineBumpTexture.vOffset = 0;
-    // lineBumpTexture.uScale = 3;
-    // lineBumpTexture.vScale = 3;
-    let lineBumpTexture = result.meshes[3].material.bumpTexture;
-
-    let knitBumpTexture = new BABYLON.Texture("img/fabric_129_normal-2K.jpg", scene);
-
-    knitBumpTexture.uOffset = 0;
-    knitBumpTexture.vOffset = 0;
-    knitBumpTexture.uScale = 20;
-    knitBumpTexture.vScale = 20;
-    console.log(result.meshes[3].material);
-    result.meshes[3].material._metallicTexture = null;
-    result.meshes[4].material._metallicTexture = null;
-
-    result.meshes[3].material.bumpTexture.level = 1;
-    result.meshes[4].material.bumpTexture.level = 1;
-    result.meshes[3].material.ambientTexture.level = 1.2;
-    result.meshes[4].material.ambientTexture.level = 1.2;
-
-    for (let i = 0; i < colorChoice.length; i++) {
-      if (colorChoice[i].classList[1] == "secundColor") {
-        colorChoice[i].addEventListener("click", function () {
-          secundColorPicked = colorChoice[i].ariaValueText;
-
-          result.meshes[4].material.albedoColor = new BABYLON.Color3.FromHexString(
-            colorChoice[i].ariaValueText
-          );
-        });
-      } else if (colorChoice[i].classList[1] == "firstColor") {
-        colorChoice[i].addEventListener("click", function () {
-          firstColorPicked = colorChoice[i].ariaValueText;
-          result.meshes[3].material.albedoColor = new BABYLON.Color3.FromHexString(
-            colorChoice[i].ariaValueText
-          );
-        });
-      } else {
-        colorChoice[i].addEventListener("click", function () {
-          textilePicked = colorChoice[i].ariaValueText;
-
-          if (textilePicked == "Tekstil") {
-            result.meshes[3].material.bumpTexture = knitBumpTexture;
-            result.meshes[4].material.bumpTexture = knitBumpTexture;
-            // result.meshes[3].material._metallicTexture = knitBumpTexture;
-            // result.meshes[4].material._metallicTexture = knitBumpTexture;
-            // result.meshes[3].material._metallicTexture.level = 0.01;
-            // result.meshes[4].material._metallicTexture.level = 0.01;
-            for (let i = 1; i < result.meshes.length; i++) {
-              result.meshes[i].material.ambientTexture = shadowTextureKnit;
-              // result.meshes[i].material._useLightmapAsShadowmap = true;
-              // light.excludedMeshes.push(result.meshes[i]);
-            }
-          } else if (textilePicked == "Linije") {
-            result.meshes[3].material.bumpTexture = lineBumpTexture;
-            result.meshes[4].material.bumpTexture = lineBumpTexture;
-            for (let i = 1; i < result.meshes.length; i++) {
-              result.meshes[i].material.ambientTexture = shadowTextureLine;
-              console.log(result.meshes[i].material);
-              // result.meshes[i].material._useLightmapAsShadowmap = true;
-              // light.excludedMeshes.push(result.meshes[i]);
-            }
-          }
-        });
+        lightHL.excludedMeshes.push(result.meshes[i]);
+        result.meshes[i].material.metallicF0Factor = 0.5;
       }
-    }
 
-    var frame = 0;
-    let oldValue = 0;
-    let newValue = 0;
-    var scrollDiv = document.getElementById("scrollDiv");
+      jakna.rotationQuaternion = null;
+      if (window.innerWidth > window.innerHeight) {
+        scene.activeCamera = scene.cameras[1];
+      } else {
+        scene.activeCamera = scene.cameras[1];
+        // scene.activeCamera.position.z = 0.3;
+        // scene.activeCamera.position.y = 0.01;
+      }
 
-    let cover = document.getElementById("cover");
+      scene.activeCamera.attachControl(canvas, true);
 
-    let bigText = document.getElementsByClassName("BigText");
+      // scene.animationGroups.find((a) => a.name === "CameraAction").play(true);
+      // scene.animationGroups.find((a) => a.name === "CameraAction").scene = scene;
+      // console.log(scene.animationGroups.find((a) => a.name === "CameraAction"));
+      // for (
+      //   let i = 0;
+      //   i < scene.animationGroups.find((a) => a.name === "CameraAction")._targetedAnimations.length;
+      //   i++
+      // ) {
+      //   scene.animationGroups.find((a) => a.name === "CameraAction")._targetedAnimations[i].target =
+      //     camera;
+      // }
+      console.log(scene.animationGroups.find((a) => a.name === "CameraAction"));
 
-    window.addEventListener("scroll", () => {
-      const currentScroll = window.pageYOffset;
-      newValue = window.pageYOffset;
+      console.log(camera);
+      console.log(scene.cameras[1]);
+
+      scene.animationGroups.find((a) => a.name === "CameraAction").play(true);
+
+      // let lineBumpTexture = new BABYLON.Texture("img/InnerColor(Stripes) (Normal).png", scene);
+
+      // lineBumpTexture.uOffset = 0;
+      // lineBumpTexture.vOffset = 0;
+      // lineBumpTexture.uScale = 3;
+      // lineBumpTexture.vScale = 3;
+      let lineBumpTexture = result.meshes[3].material.bumpTexture;
+
+      let knitBumpTexture = new BABYLON.Texture(
+        "img/fabric_129_normal-2K.jpg",
+        scene
+      );
+
+      knitBumpTexture.uOffset = 0;
+      knitBumpTexture.vOffset = 0;
+      knitBumpTexture.uScale = 20;
+      knitBumpTexture.vScale = 20;
+      console.log(result.meshes[3].material);
+      result.meshes[3].material._metallicTexture = null;
+      result.meshes[4].material._metallicTexture = null;
+
+      result.meshes[3].material.bumpTexture.level = 1;
+      result.meshes[4].material.bumpTexture.level = 1;
+      result.meshes[3].material.ambientTexture.level = 1.2;
+      result.meshes[4].material.ambientTexture.level = 1.2;
 
       for (let i = 0; i < colorChoice.length; i++) {
-        if (currentScroll <= 300) {
-          // colorChoice[i].style.opacity = currentScroll / 300;
-          colorsUp.style.opacity = currentScroll / 300;
-          colorsDown.style.opacity = currentScroll / 300;
+        if (colorChoice[i].classList[1] == "secundColor") {
+          colorChoice[i].addEventListener("click", function () {
+            secundColorPicked = colorChoice[i].ariaValueText;
 
-          // if (colorChoice[i].style.opacity < 0.3) {
-          //   colorChoice[i].style.display = "none";
-          // } else {
-          //   colorChoice[i].style.display = "flex";
-          // }
-          cover.style.opacity = 1 - currentScroll / 300;
+            result.meshes[4].material.albedoColor =
+              new BABYLON.Color3.FromHexString(colorChoice[i].ariaValueText);
+          });
+        } else if (colorChoice[i].classList[1] == "firstColor") {
+          colorChoice[i].addEventListener("click", function () {
+            firstColorPicked = colorChoice[i].ariaValueText;
+            result.meshes[3].material.albedoColor =
+              new BABYLON.Color3.FromHexString(colorChoice[i].ariaValueText);
+          });
         } else {
-          // colorChoice[i].style.opacity = 1;
-          colorsDown.style.opacity = 1;
-          colorsUp.style.opacity = 1;
+          colorChoice[i].addEventListener("click", function () {
+            textilePicked = colorChoice[i].ariaValueText;
 
-          cover.style.opacity = 0;
+            if (textilePicked == "Tekstil") {
+              result.meshes[3].material.bumpTexture = knitBumpTexture;
+              result.meshes[4].material.bumpTexture = knitBumpTexture;
+              // result.meshes[3].material._metallicTexture = knitBumpTexture;
+              // result.meshes[4].material._metallicTexture = knitBumpTexture;
+              // result.meshes[3].material._metallicTexture.level = 0.01;
+              // result.meshes[4].material._metallicTexture.level = 0.01;
+              for (let i = 1; i < result.meshes.length; i++) {
+                result.meshes[i].material.ambientTexture = shadowTextureKnit;
+                // result.meshes[i].material._useLightmapAsShadowmap = true;
+                // light.excludedMeshes.push(result.meshes[i]);
+              }
+            } else if (textilePicked == "Linije") {
+              result.meshes[3].material.bumpTexture = lineBumpTexture;
+              result.meshes[4].material.bumpTexture = lineBumpTexture;
+              for (let i = 1; i < result.meshes.length; i++) {
+                result.meshes[i].material.ambientTexture = shadowTextureLine;
+                console.log(result.meshes[i].material);
+                // result.meshes[i].material._useLightmapAsShadowmap = true;
+                // light.excludedMeshes.push(result.meshes[i]);
+              }
+            }
+          });
         }
       }
 
-      for (let i = 0; i < bigText.length; i++) {
-        if (currentScroll > 500 && currentScroll < 800) {
-          bigText[i].style.opacity = 1 - (currentScroll - 500) / 300;
-        } else if (currentScroll > 800) {
-          bigText[i].style.opacity = 0;
-        } else if (currentScroll <= 300) {
-          bigText[i].style.opacity = currentScroll / 300;
-        } else if (currentScroll > 300 && currentScroll < 500) {
-          bigText[i].style.opacity = 1;
-        }
-      }
+      var frame = 0;
+      let oldValue = 0;
+      let newValue = 0;
+      var scrollDiv = document.getElementById("scrollDiv");
 
-      if (currentScroll > 800 && currentScroll < 8000) {
-        canvas.style.backgroundSize = 1920 + (currentScroll - 800) / 3 + "px";
-        canvas.style.backgroundPositionX = -((currentScroll - 800) / 6) + "px";
-        canvas.style.backgroundPositionY = -((currentScroll - 800) / 6) + "px";
-      } else if (currentScroll > 8000 && currentScroll < 12960) {
-        canvas.style.backgroundSize = 4320 - (currentScroll - 8000) / 3 + "px";
-        canvas.style.backgroundPositionX = -1200 + (currentScroll - 8000) / 6 + "px";
-        canvas.style.backgroundPositionY = -1200 + (currentScroll - 8000) / 6 + "px";
-      }
+      let cover = document.getElementById("cover");
 
-      scene.beforeRender = function () {
-        if (
-          window.innerWidth < window.innerHeight &&
-          currentScroll < 7100 &&
-          currentScroll > 3000
-        ) {
-          scene.activeCamera.position.z = currentScroll / 10000;
+      let bigText = document.getElementsByClassName("BigText");
+      let newPosition;
+      let lastPosition;
+      setTimeout(function () {
+        newPosition = scene.activeCamera.globalPosition.clone();
+        lastPosition = scene.activeCamera.globalPosition.clone();
+      }, 1000);
+      canvas.style.backgroundSize = "1930px";
+      console.log(
+        Number(
+          canvas.style.backgroundSize.slice(
+            0,
+            canvas.style.backgroundSize.indexOf("p")
+          )
+        )
+      );
+      let positionBackground = 1930;
+      let positionBackgroundY = 0;
+      let positionBackgroundX = 0;
+
+      window.addEventListener("scroll", () => {
+        const currentScroll = window.pageYOffset;
+        newValue = window.pageYOffset;
+
+        for (let i = 0; i < colorChoice.length; i++) {
+          if (currentScroll <= 300) {
+            // colorChoice[i].style.opacity = currentScroll / 300;
+            colorsUp.style.opacity = currentScroll / 300;
+            colorsDown.style.opacity = currentScroll / 300;
+
+            // if (colorChoice[i].style.opacity < 0.3) {
+            //   colorChoice[i].style.display = "none";
+            // } else {
+            //   colorChoice[i].style.display = "flex";
+            // }
+            cover.style.opacity = 1 - currentScroll / 300;
+          } else {
+            // colorChoice[i].style.opacity = 1;
+            colorsDown.style.opacity = 1;
+            colorsUp.style.opacity = 1;
+
+            cover.style.opacity = 0;
+          }
         }
-        if (oldValue < newValue) {
-          frame = currentScroll / 15.88;
-          jakna.position.y = -(currentScroll * 0.0001);
-          // if (currentScroll < 100) {
-          //   scene.animationGroups.find((a) => a.name === "teloAction.001").start(false, 1, 0);
-          // }
-        } else if (oldValue > newValue) {
-          frame = currentScroll / 15.88;
-          jakna.position.y = -(currentScroll * 0.0001);
+
+        // if (currentScroll % 4 == 0) {
+
+        newPosition = scene.cameras[1].globalPosition.clone();
+
+        if (newPosition.z > lastPosition.z) {
+          positionBackground -= (newPosition.z - lastPosition.z) * 10;
+          if (positionBackground < 1920) {
+            positionBackground = 1920;
+          }
+          canvas.style.backgroundSize = positionBackground + "px";
+        } else if (newPosition.z < lastPosition.z) {
+          positionBackground -= (newPosition.z - lastPosition.z) * 10;
+          if (positionBackground < 1920) {
+            positionBackground = 1920;
+          }
+          canvas.style.backgroundSize = positionBackground + "px";
         }
-        oldValue = newValue;
-        if (window.innerWidth > window.innerHeight) {
-          scene.animationGroups.find((a) => a.name === "CameraAction").play(true);
-          scene.animationGroups.find((a) => a.name === "CameraAction").goToFrame(frame);
-          scene.animationGroups.find((a) => a.name === "CameraAction").pause();
-        } else {
-          // scene.animationGroups.find((a) => a.name === "CameraAction.002").play(true);
-          // scene.animationGroups.find((a) => a.name === "CameraAction.002").goToFrame(frame);
-          // scene.animationGroups.find((a) => a.name === "CameraAction.002").pause();
+
+        // if (newPosition.y > lastPosition.y) {
+        //   positionBackgroundX += newPosition.y - lastPosition.y;
+        //   console.log(positionBackgroundX);
+        //   canvas.style.backgroundPositionX = positionBackgroundX + "px";
+        // } else if (newPosition.y < lastPosition.y) {
+        //   positionBackgroundX -= lastPosition.y - newPosition.y;
+        //   canvas.style.backgroundPositionX = positionBackgroundX + "px";
+        //   console.log(positionBackgroundX);
+        // }
+
+        // if (newPosition.z > lastPosition.z) {
+        //   positionBackgroundY += newPosition.z - lastPosition.z;
+        //   console.log(positionBackgroundY);
+        //   canvas.style.backgroundPositionY = positionBackgroundY + "px";
+        // } else if (newPosition.z < lastPosition.z) {
+        //   positionBackgroundY -= lastPosition.z - newPosition.z;
+        //   canvas.style.backgroundPositionY = positionBackgroundY + "px";
+        //   console.log(positionBackgroundY);
+        // }
+
+        for (let i = 0; i < bigText.length; i++) {
+          if (currentScroll > 500 && currentScroll < 800) {
+            bigText[i].style.opacity = 1 - (currentScroll - 500) / 300;
+          } else if (currentScroll > 800) {
+            bigText[i].style.opacity = 0;
+          } else if (currentScroll <= 300) {
+            bigText[i].style.opacity = currentScroll / 300;
+          } else if (currentScroll > 300 && currentScroll < 500) {
+            bigText[i].style.opacity = 1;
+          }
         }
-      };
-    });
-  });
+        lastPosition = newPosition;
+
+        // if (currentScroll > 800 && currentScroll < 8000) {
+        //   canvas.style.backgroundSize = 1920 + (currentScroll - 800) / 3 + "px";
+        //   canvas.style.backgroundPositionX =
+        //     -((currentScroll - 800) / 6) + "px";
+        //   canvas.style.backgroundPositionY =
+        //     -((currentScroll - 800) / 6) + "px";
+        // } else if (currentScroll > 8000 && currentScroll < 12960) {
+        //   canvas.style.backgroundSize =
+        //     4320 - (currentScroll - 8000) / 3 + "px";
+        //   canvas.style.backgroundPositionX =
+        //     -1200 + (currentScroll - 8000) / 6 + "px";
+        //   canvas.style.backgroundPositionY =
+        //     -1200 + (currentScroll - 8000) / 6 + "px";
+        // }
+
+        scene.beforeRender = function () {
+          if (
+            window.innerWidth < window.innerHeight &&
+            currentScroll < 7100 &&
+            currentScroll > 3000
+          ) {
+            scene.activeCamera.position.z = currentScroll / 10000;
+          }
+          if (oldValue < newValue) {
+            frame = currentScroll / 15.88;
+            jakna.position.y = -(currentScroll * 0.0001);
+            // if (currentScroll < 100) {
+            //   scene.animationGroups.find((a) => a.name === "teloAction.001").start(false, 1, 0);
+            // }
+          } else if (oldValue > newValue) {
+            frame = currentScroll / 15.88;
+            jakna.position.y = -(currentScroll * 0.0001);
+          }
+          oldValue = newValue;
+          if (window.innerWidth > window.innerHeight) {
+            scene.animationGroups
+              .find((a) => a.name === "CameraAction")
+              .play(true);
+            scene.animationGroups
+              .find((a) => a.name === "CameraAction")
+              .goToFrame(frame);
+            scene.animationGroups
+              .find((a) => a.name === "CameraAction")
+              .pause();
+          } else {
+            // scene.animationGroups.find((a) => a.name === "CameraAction.002").play(true);
+            // scene.animationGroups.find((a) => a.name === "CameraAction.002").goToFrame(frame);
+            // scene.animationGroups.find((a) => a.name === "CameraAction.002").pause();
+          }
+        };
+      });
+    }
+  );
 
   // let defaultRendering = new BABYLON.DefaultRenderingPipeline("defRend", true, scene);
 
