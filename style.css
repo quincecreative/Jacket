@@ -330,4 +330,5 @@ body::-webkit-scrollbar {
   justify-content: center;
   flex-direction: column;
   opacity: 1;
+  transition: opacity 0.3s ease, display 0.3s ease allow-discrete;
 }

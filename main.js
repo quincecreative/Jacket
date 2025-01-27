@@ -447,33 +447,114 @@ var createScene = function () {
       let beislineY = jakna1._rotationQuaternion.y;
       let beislineZ = jakna1._rotationQuaternion.z;
       let beislineW = jakna1._rotationQuaternion.w;
-
       ////////////////////////////////
-      scene.onBeforeRenderObservable.add(() => {
-        if (!rotating) {
-          arc.style.display = "none";
-          if (jakna1._rotationQuaternion.x > beislineX) {
-            jakna1._rotationQuaternion.x -= 0.001;
-          } else if (jakna1._rotationQuaternion.x < beislineX) {
-            jakna1._rotationQuaternion.x += 0.001;
+      let rotateFlag = true;
+
+      let cubeRotationSpeed = 0.005;
+
+      let lastPointerX, lastPointerY;
+
+      let xStarting = result.meshes[2].rotation.x;
+
+      let yStarting = result.meshes[2].rotation.y;
+      let zStarting = result.meshes[2].rotation.z;
+
+      function onPointerMove() {
+        let angle = result.meshes[2].rotation.y / (2 * Math.PI);
+        while (angle > 1) {
+          angle -= 1;
+        }
+
+        if (!rotateFlag) {
+          let diffX = scene.pointerX - lastPointerX;
+          let diffY = scene.pointerY - lastPointerY;
+          // result.meshes[2].rotation.y -= diffX * 0.003;
+          for (let i = 1; i < result.meshes.length; i++) {
+            result.meshes[i].rotation.y += diffX * 0.003;
           }
-          if (jakna1._rotationQuaternion.y > beislineY) {
-            jakna1._rotationQuaternion.y -= 0.001;
-          } else if (jakna1._rotationQuaternion.y < beislineY) {
-            jakna1._rotationQuaternion.y += 0.001;
+
+          // if (
+          //   (angle > 0.25 && angle < 0.75) ||
+          //   (angle < -0.25 && angle > -0.75)
+          // ) {
+          //   result.meshes[2].rotation.x -= diffY * 0.00025;
+          // } else {
+          //   result.meshes[2].rotation.x += diffY * 0.00025;
+          // }
+
+          lastPointerX = scene.pointerX;
+          lastPointerY = scene.pointerY;
+        }
+      }
+
+      function onPointerDown() {
+        lastPointerX = scene.pointerX;
+        lastPointerY = scene.pointerY;
+        rotateFlag = false;
+        arc.style.display = "flex";
+        arc.style.opacity = 1;
+        scene.activeCamera.detachControl();
+      }
+
+      function onPointerUp() {
+        rotateFlag = true;
+        arc.style.opacity = 0;
+        arc.style.display = "none";
+        scene.activeCamera.attachControl();
+      }
+
+      canvas.addEventListener("pointermove", onPointerMove, false);
+      canvas.addEventListener("pointerdown", onPointerDown, false);
+      canvas.addEventListener("pointerup", onPointerUp, false);
+
+      scene.onDispose = function () {
+        canvas.removeEventListener("pointermove", onPointerMove);
+        canvas.removeEventListener("pointerdown", onPointerDown, false);
+        canvas.removeEventListener("pointerup", onPointerUp, false);
+      };
+      scene.registerBeforeRender(function () {
+        if (rotateFlag) {
+          if (result.meshes[2].rotation.y < xStarting) {
+            // result.meshes[2].rotation.y += 0.02;
+            for (let i = 1; i < result.meshes.length; i++) {
+              result.meshes[i].rotation.y += 0.02;
+            }
           }
-          if (jakna1._rotationQuaternion.z > beislineZ) {
-            jakna1._rotationQuaternion.z -= 0.001;
-          } else if (jakna1._rotationQuaternion.z < beislineZ) {
-            jakna1._rotationQuaternion.z += 0.001;
-          }
-          if (jakna1._rotationQuaternion.w > beislineW) {
-            jakna1._rotationQuaternion.w -= 0.001;
-          } else if (jakna1._rotationQuaternion.w < beislineW) {
-            jakna1._rotationQuaternion.w += 0.001;
+          if (result.meshes[2].rotation.y > xStarting) {
+            // result.meshes[2].rotation.y -= 0.02;
+            for (let i = 1; i < result.meshes.length; i++) {
+              result.meshes[i].rotation.y -= 0.02;
+            }
           }
         }
       });
+
+      ////////////////////////////////
+      // scene.onBeforeRenderObservable.add(() => {
+      //   if (!rotating) {
+      //     arc.style.display = "none";
+      //     if (jakna1._rotationQuaternion.x > beislineX) {
+      //       jakna1._rotationQuaternion.x -= 0.001;
+      //     } else if (jakna1._rotationQuaternion.x < beislineX) {
+      //       jakna1._rotationQuaternion.x += 0.001;
+      //     }
+      //     if (jakna1._rotationQuaternion.y > beislineY) {
+      //       jakna1._rotationQuaternion.y -= 0.001;
+      //     } else if (jakna1._rotationQuaternion.y < beislineY) {
+      //       jakna1._rotationQuaternion.y += 0.001;
+      //     }
+      //     if (jakna1._rotationQuaternion.z > beislineZ) {
+      //       jakna1._rotationQuaternion.z -= 0.001;
+      //     } else if (jakna1._rotationQuaternion.z < beislineZ) {
+      //       jakna1._rotationQuaternion.z += 0.001;
+      //     }
+      //     if (jakna1._rotationQuaternion.w > beislineW) {
+      //       jakna1._rotationQuaternion.w -= 0.001;
+      //     } else if (jakna1._rotationQuaternion.w < beislineW) {
+      //       jakna1._rotationQuaternion.w += 0.001;
+      //     }
+      //   }
+      // });
 
       ///////////////////////////////
 
@@ -482,38 +563,38 @@ var createScene = function () {
       const sensitivity = 0.002;
       arc.style.display = "none";
 
-      scene.onPointerObservable.add((pointerInfo) => {
-        if (pointerInfo.type === 1) {
-          scene.activeCamera.detachControl();
-          if (pointerInfo.pickInfo.pickedMesh._parentNode.id === "Default") {
-            if (pointerInfo.type === 1) {
-              rotating = true;
-              arc.style.display = "flex";
-            }
-          }
-        } else if (pointerInfo.type === 2 && rotating) {
-          rotating = false;
-          scene.activeCamera.attachControl();
-        } else if (pointerInfo.type === 4 && rotating) {
-          const matrix = scene.activeCamera.getWorldMatrix();
+      // scene.onPointerObservable.add((pointerInfo) => {
+      //   if (pointerInfo.type === 1) {
+      //     scene.activeCamera.detachControl();
+      //     if (pointerInfo.pickInfo.pickedMesh._parentNode.id === "Default") {
+      //       if (pointerInfo.type === 1) {
+      //         rotating = true;
+      //         arc.style.display = "flex";
+      //       }
+      //     }
+      //   } else if (pointerInfo.type === 2 && rotating) {
+      //     rotating = false;
+      //     scene.activeCamera.attachControl();
+      //   } else if (pointerInfo.type === 4 && rotating) {
+      //     const matrix = scene.activeCamera.getWorldMatrix();
 
-          rightDir.copyFromFloats(matrix.m[0], matrix.m[1], matrix.m[2]);
-          upDir.copyFromFloats(matrix.m[4], matrix.m[5], matrix.m[6]);
+      //     rightDir.copyFromFloats(matrix.m[0], matrix.m[1], matrix.m[2]);
+      //     upDir.copyFromFloats(matrix.m[4], matrix.m[5], matrix.m[6]);
 
-          // jakna1.rotateAround(
-          //   jakna1.position,
-          //   rightDir,
-          //   pointerInfo.event.movementY * -1 * sensitivity
-          // );
-          // let movment = pointerInfo.event.movementX * 1 * sensitivity;
-          // console.log(movment);
-          jakna1.rotateAround(
-            jakna1.position,
-            upDir,
-            pointerInfo.event.movementX * 1 * sensitivity
-          );
-        }
-      });
+      //     // jakna1.rotateAround(
+      //     //   jakna1.position,
+      //     //   rightDir,
+      //     //   pointerInfo.event.movementY * -1 * sensitivity
+      //     // );
+      //     // let movment = pointerInfo.event.movementX * 1 * sensitivity;
+      //     // console.log(movment);
+      //     jakna1.rotateAround(
+      //       jakna1.position,
+      //       upDir,
+      //       pointerInfo.event.movementX * 1 * sensitivity
+      //     );
+      //   }
+      // });
 
       //////////////////////
       let positionBackground = 1920;
