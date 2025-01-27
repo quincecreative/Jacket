@@ -486,19 +486,23 @@ var createScene = function () {
           lastPointerY = scene.pointerY;
         }
       }
+      let clicked = false;
 
       function onPointerDown() {
         lastPointerX = scene.pointerX;
         lastPointerY = scene.pointerY;
         rotateFlag = false;
+        // arc.style.opacity = 1;
+        clicked = true;
         arc.style.display = "flex";
-        arc.style.opacity = 1;
+
         scene.activeCamera.detachControl();
       }
 
       function onPointerUp() {
         rotateFlag = true;
-        arc.style.opacity = 0;
+        clicked = false;
+        // arc.style.opacity = 0;
         arc.style.display = "none";
         scene.activeCamera.attachControl();
       }
@@ -512,7 +516,27 @@ var createScene = function () {
         canvas.removeEventListener("pointerdown", onPointerDown, false);
         canvas.removeEventListener("pointerup", onPointerUp, false);
       };
+      let opacity = 0;
+      arc.style.opacity = opacity;
+      let opacityZone = false;
       scene.registerBeforeRender(function () {
+        if (clicked) {
+          if (arc.style.opacity < frameAndText.style.opacity) {
+            opacity += 0.1;
+          }
+          if (opacity > frameAndText.style.opacity) {
+            opacity = frameAndText.style.opacity;
+          }
+        } else {
+          if (arc.style.opacity > 0) {
+            opacity -= 0.1;
+          }
+          if (opacity < 0) {
+            opacity = 0;
+          }
+        }
+        arc.style.opacity = opacity;
+
         if (rotateFlag) {
           if (result.meshes[2].rotation.y < xStarting) {
             // result.meshes[2].rotation.y += 0.02;
@@ -561,7 +585,7 @@ var createScene = function () {
       const rightDir = new BABYLON.Vector3();
       const upDir = new BABYLON.Vector3();
       const sensitivity = 0.002;
-      arc.style.display = "none";
+      // arc.style.display = "none";
 
       // scene.onPointerObservable.add((pointerInfo) => {
       //   if (pointerInfo.type === 1) {
@@ -671,17 +695,21 @@ var createScene = function () {
         // }
 
         if (currentScroll > 500 && currentScroll < 800) {
+          opacityZone = true;
           frameAndText.style.opacity = 1 - (currentScroll - 500) / 300;
           arc.style.opacity = 1 - (currentScroll - 500) / 300;
         } else if (currentScroll > 800) {
           frameAndText.style.opacity = 0;
           arc.style.opacity = 0;
+          opacityZone = false;
         } else if (currentScroll <= 300) {
           frameAndText.style.opacity = currentScroll / 300;
           arc.style.opacity = currentScroll / 300;
+          opacityZone = false;
         } else if (currentScroll > 300 && currentScroll < 500) {
           frameAndText.style.opacity = 1;
           arc.style.opacity = 1;
+          opacityZone = false;
         }
 
         for (let i = 0; i < bigText.length; i++) {
