@@ -325,10 +325,16 @@ body::-webkit-scrollbar {
   left: 40dvw;
   height: 15dvh;
   width: 20dvw;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  opacity: 1;
+  opacity: 0;
   transition: opacity 0.3s ease, display 0.3s ease allow-discrete;
+}
+@starting-style {
+  #arc {
+    opacity: 0;
+    display: none;
+  }
 }
