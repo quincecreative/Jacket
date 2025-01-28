@@ -301,6 +301,51 @@ var createScene = function () {
     // myText1.material.alpha = 0.6;
   }
   // makeText();
+  let br = 0;
+  let loadinginterval = setInterval(function () {
+    document.getElementById("loadingText").innerText += ".";
+    br++;
+    if (br == 4) {
+      document.getElementById("loadingText").innerText =
+        "Loading one stitch at a time";
+      br = 0;
+    }
+  }, 1000);
+
+  //////////
+
+  let rotateJacked = new BABYLON.Animation(
+    "rotateJacked",
+    "rotation.y",
+    60,
+    BABYLON.Animation.ANIMATIONTYPE_FLOAT,
+    BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT
+  );
+
+  let keyFrames = [];
+
+  keyFrames.push({
+    frame: 0,
+    value: 0,
+  });
+
+  keyFrames.push({
+    frame: 60,
+    value: 2 * Math.PI,
+  });
+  rotateJacked.setKeys(keyFrames);
+
+  const easingFunction = new BABYLON.CircleEase();
+
+  // For each easing function, you can choose between EASEIN (default), EASEOUT, EASEINOUT
+  easingFunction.setEasingMode(BABYLON.EasingFunction.EASINGMODE_EASEINOUT);
+
+  // Adding the easing function to the animation
+  rotateJacked.setEasingFunction(easingFunction);
+
+  let animating = false;
+
+  /////////////
 
   BABYLON.SceneLoader.ImportMeshAsync(
     "",
@@ -319,21 +364,60 @@ var createScene = function () {
         "loadingPercentages"
       ).innerHTML = `${loadedPercent}`;
       document.getElementById("loadingLine").style.width = `${loadedPercent}%`;
+      // if (loadedPercent % 5 == 0) {
+      //   document.getElementById("loadingText").innerText =
+      //     "Loading one stitch at a time..";
+      // } else if (loadedPercent % 3 == 0) {
+      //   document.getElementById("loadingText").innerText =
+      //     "Loading one stitch at a time.";
+      // } else {
+      //   document.getElementById("loadingText").innerText =
+      //     "Loading one stitch at a time";
+      // }
+      if (loadedPercent == 100) {
+        clearInterval(loadinginterval);
+        document.getElementById("loadingText").innerText = "Loaded";
+      }
     }
   ).then((result) => {
     let jakna = result.meshes[0];
     console.log(result);
     let jakna1 = result.meshes[3]._parentNode;
 
-    jakna.scaling = new BABYLON.Vector3(-4, 4, 4);
-    jakna.position = new BABYLON.Vector3(1, -5, 0);
-    jakna.rotation = new BABYLON.Vector3(-0.4, 0.2, 0.2);
+    let xStarting = result.meshes[2].rotation.x;
+    console.log(xStarting);
+
+    // jakna.scaling = new BABYLON.Vector3(-4, 4, 4);
+    // jakna.position = new BABYLON.Vector3(1, -5, 0);
+    // jakna.rotation = new BABYLON.Vector3(-0.4, 0.2, 0.2);
 
     for (let i = 1; i < result.meshes.length; i++) {
       result.meshes[i].material.ambientTexture = shadowTextureLine;
 
       lightHL.excludedMeshes.push(result.meshes[i]);
       result.meshes[i].material.metallicF0Factor = 0.5;
+
+      result.meshes[i].animations.push(rotateJacked);
+      // setTimeout(function () {
+      //   animating = true;
+      //   console.log(result.meshes[i].animations);
+      //   scene.beginAnimation(result.meshes[i], 0, 60, false, 1, function () {
+      //     xStarting = result.meshes[2].rotation.y;
+      //     console.log(xStarting);
+      //     animating = false;
+      //   });
+      // }, 4000);
+    }
+    function animationRotateF() {
+      for (let i = 1; i < result.meshes.length; i++) {
+        animating = true;
+        console.log(result.meshes[i].animations);
+        scene.beginAnimation(result.meshes[i], 0, 60, false, 1, function () {
+          xStarting = result.meshes[2].rotation.y;
+
+          animating = false;
+        });
+      }
     }
 
     jakna.rotationQuaternion = null;
@@ -395,18 +479,21 @@ var createScene = function () {
       if (colorChoice[i].classList[1] == "secundColor") {
         colorChoice[i].addEventListener("click", function () {
           secundColorPicked = colorChoice[i].ariaValueText;
+          animationRotateF();
 
           result.meshes[4].material.albedoColor =
             new BABYLON.Color3.FromHexString(colorChoice[i].ariaValueText);
         });
       } else if (colorChoice[i].classList[1] == "firstColor") {
         colorChoice[i].addEventListener("click", function () {
+          animationRotateF();
           firstColorPicked = colorChoice[i].ariaValueText;
           result.meshes[3].material.albedoColor =
             new BABYLON.Color3.FromHexString(colorChoice[i].ariaValueText);
         });
       } else {
         colorChoice[i].addEventListener("click", function () {
+          animationRotateF();
           textilePicked = colorChoice[i].ariaValueText;
 
           if (textilePicked == "Tekstil") {
@@ -470,8 +557,6 @@ var createScene = function () {
     let cubeRotationSpeed = 0.005;
 
     let lastPointerX, lastPointerY;
-
-    let xStarting = result.meshes[2].rotation.x;
 
     let yStarting = result.meshes[2].rotation.y;
     let zStarting = result.meshes[2].rotation.z;
@@ -538,6 +623,10 @@ var createScene = function () {
     arc.style.display = "none";
     let opacityZone = false;
     scene.registerBeforeRender(function () {
+      if (animating) {
+        // console.log(result.meshes[3].animations);
+      }
+
       if (clicked) {
         if (arc.style.opacity < frameAndText.style.opacity) {
           opacity += 0.1;
@@ -555,7 +644,7 @@ var createScene = function () {
       }
       arc.style.opacity = opacity;
 
-      if (rotateFlag) {
+      if (rotateFlag && !animating) {
         if (result.meshes[2].rotation.y < xStarting) {
           // result.meshes[2].rotation.y += 0.02;
           for (let i = 1; i < result.meshes.length; i++) {
