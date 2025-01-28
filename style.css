@@ -338,3 +338,28 @@ body::-webkit-scrollbar {
     display: none;
   }
 }
+
+#loading {
+  height: 20%;
+  width: 40%;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  color: white;
+  font-family: "Beiruti", serif;
+  flex-direction: column;
+  font-size: 2em;
+  position: fixed;
+  top: 77%;
+}
+
+#loadingLineBox {
+  width: 40%;
+  height: 2%;
+  background-color: rgba(240, 248, 255, 0);
+}
+#loadingLine {
+  width: 0%;
+  height: 100%;
+  background-color: rgb(240, 248, 255);
+}
