@@ -35,6 +35,8 @@ var createScene = function () {
   );
   scene.clearColor = new BABYLON.Color4(0, 0, 0, 0);
 
+  console.log(screen.width);
+
   // scene.debugLayer.show({
   //   embedMode: true,
   // });
@@ -547,7 +549,7 @@ var createScene = function () {
       newPosition = scene.activeCamera.globalPosition.clone();
       lastPosition = scene.activeCamera.globalPosition.clone();
     }, 1000);
-    // canvas.style.backgroundSize = "1920px";
+    canvas.style.backgroundSize = screen.width + "px";
     console.log(
       Number(
         canvas.style.backgroundSize.slice(
@@ -659,13 +661,13 @@ var createScene = function () {
         if (result.meshes[2].rotation.y < xStarting) {
           // result.meshes[2].rotation.y += 0.02;
           for (let i = 1; i < result.meshes.length; i++) {
-            result.meshes[i].rotation.y += 0.04;
+            result.meshes[i].rotation.y += 0.08;
           }
         }
         if (result.meshes[2].rotation.y > xStarting) {
           // result.meshes[2].rotation.y -= 0.02;
           for (let i = 1; i < result.meshes.length; i++) {
-            result.meshes[i].rotation.y -= 0.04;
+            result.meshes[i].rotation.y -= 0.08;
           }
         }
       }
@@ -739,7 +741,7 @@ var createScene = function () {
     // });
 
     //////////////////////
-    let positionBackground = 1920;
+    let positionBackground = screen.width;
     let positionBackgroundY = 0;
     let positionBackgroundX = 0;
 
@@ -778,19 +780,19 @@ var createScene = function () {
 
       newPosition = scene.cameras[1].globalPosition.clone();
 
-      // if (newPosition.z > lastPosition.z) {
-      //   positionBackground -= (newPosition.z - lastPosition.z) * 10;
-      //   if (positionBackground < 1920) {
-      //     positionBackground = 1920;
-      //   }
-      //   canvas.style.backgroundSize = positionBackground + "px";
-      // } else if (newPosition.z < lastPosition.z) {
-      //   positionBackground -= (newPosition.z - lastPosition.z) * 10;
-      //   if (positionBackground < 1920) {
-      //     positionBackground = 1920;
-      //   }
-      //   canvas.style.backgroundSize = positionBackground + "px";
-      // }
+      if (newPosition.z > lastPosition.z) {
+        positionBackground += (newPosition.z - lastPosition.z) * 100;
+        if (positionBackground < screen.width) {
+          positionBackground = screen.width;
+        }
+        canvas.style.backgroundSize = positionBackground + "px";
+      } else if (newPosition.z < lastPosition.z) {
+        positionBackground += (newPosition.z - lastPosition.z) * 100;
+        if (positionBackground < screen.width) {
+          positionBackground = screen.width;
+        }
+        canvas.style.backgroundSize = positionBackground + "px";
+      }
 
       // if (newPosition.y > lastPosition.y) {
       //   positionBackgroundX += newPosition.y - lastPosition.y;
