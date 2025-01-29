@@ -350,6 +350,8 @@ var createScene = function () {
   let animating = false;
 
   /////////////
+  let estimatedProgress;
+  let progressInterval;
 
   BABYLON.SceneLoader.ImportMeshAsync(
     "",
@@ -357,24 +359,37 @@ var createScene = function () {
     "Jakna Camera 3.glb",
     scene,
     (evt) => {
-      let loadedPercent = 1; // Default to 1 to avoid being stuck at 0
       if (evt.lengthComputable) {
-        loadedPercent = ((evt.loaded / evt.total) * 100).toFixed();
-      } else {
-        // Estimate progress based on loaded data
-        loadedPercent = Math.min(loadedPercent + 5, 95); // Prevent reaching 100 prematurely
+        // If the total size is known, use real progress
+        estimatedProgress = ((evt.loaded / evt.total) * 100).toFixed();
+      } else if (!progressInterval) {
+        // If total size is unknown, start a progress simulation
+        progressInterval = setInterval(() => {
+          estimatedProgress = Math.min(estimatedProgress + 4, 95); // Prevent going over 95%
+          document.getElementById(
+            "loadingPercentages"
+          ).innerText = `${estimatedProgress}`;
+          document.getElementById(
+            "loadingLine"
+          ).style.width = `${estimatedProgress}`;
+        }, 500);
       }
+
       document.getElementById(
         "loadingPercentages"
-      ).innerText = `${loadedPercent}%`;
-      document.getElementById("loadingLine").style.width = `${loadedPercent}%`;
-
-      if (loadedPercent == 100) {
-        document.getElementById("loadingText").innerText = "Loaded";
-        clearInterval(loadinginterval);
-      }
+      ).innerText = `${estimatedProgress}`;
+      document.getElementById(
+        "loadingLine"
+      ).style.width = `${estimatedProgress}`;
     }
   ).then((result) => {
+    clearInterval(loadinginterval);
+    clearInterval(progressInterval); // Stop simulation when loading completes
+    estimatedProgress = 100;
+    document.getElementById("loadingPercentages").innerText = `100`;
+    document.getElementById("loadingLine").style.width = `100`;
+    document.getElementById("loadingText").innerText = "Loaded";
+
     let jakna = result.meshes[0];
     console.log(result);
     let jakna1 = result.meshes[3]._parentNode;
