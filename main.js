@@ -372,7 +372,7 @@ var createScene = function () {
           ).innerText = `${estimatedProgress}`;
           document.getElementById(
             "loadingLine"
-          ).style.width = `${estimatedProgress}`;
+          ).style.width = `${estimatedProgress}%`;
         }, 500);
       }
 
@@ -381,14 +381,14 @@ var createScene = function () {
       ).innerText = `${estimatedProgress}`;
       document.getElementById(
         "loadingLine"
-      ).style.width = `${estimatedProgress}`;
+      ).style.width = `${estimatedProgress}%`;
     }
   ).then((result) => {
     clearInterval(loadinginterval);
     clearInterval(progressInterval); // Stop simulation when loading completes
     estimatedProgress = 100;
     document.getElementById("loadingPercentages").innerText = `100`;
-    document.getElementById("loadingLine").style.width = `100`;
+    document.getElementById("loadingLine").style.width = `100%`;
     document.getElementById("loadingText").innerText = "Loaded";
 
     let jakna = result.meshes[0];
