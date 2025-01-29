@@ -45,13 +45,17 @@ var createScene = function () {
   // This attaches the camera to the canvas
   camera.attachControl(canvas, true);
 
+  // const hdrTexture = BABYLON.CubeTexture.CreateFromPrefilteredData(
+  //   "https://assets.babylonjs.com/environments/environmentSpecular.env",
+  //   scene
+  // );
   const hdrTexture = BABYLON.CubeTexture.CreateFromPrefilteredData(
-    "https://assets.babylonjs.com/environments/environmentSpecular.env",
+    "003.env",
     scene
   );
   // hdrTexture.rotationY = -0.2;
 
-  scene.environmentIntensity = 2;
+  scene.environmentIntensity = 2.3;
 
   scene.environmentTexture = hdrTexture;
 
@@ -354,6 +358,7 @@ var createScene = function () {
     scene,
     (evt) => {
       let loadedPercent = 0;
+      console.log("ovo bitno " + evt.lengthComputable);
       if (evt.lengthComputable) {
         loadedPercent = ((evt.loaded * 100) / evt.total).toFixed();
       } else {
@@ -536,7 +541,7 @@ var createScene = function () {
       newPosition = scene.activeCamera.globalPosition.clone();
       lastPosition = scene.activeCamera.globalPosition.clone();
     }, 1000);
-    canvas.style.backgroundSize = "1920px";
+    // canvas.style.backgroundSize = "1920px";
     console.log(
       Number(
         canvas.style.backgroundSize.slice(
@@ -648,13 +653,13 @@ var createScene = function () {
         if (result.meshes[2].rotation.y < xStarting) {
           // result.meshes[2].rotation.y += 0.02;
           for (let i = 1; i < result.meshes.length; i++) {
-            result.meshes[i].rotation.y += 0.02;
+            result.meshes[i].rotation.y += 0.04;
           }
         }
         if (result.meshes[2].rotation.y > xStarting) {
           // result.meshes[2].rotation.y -= 0.02;
           for (let i = 1; i < result.meshes.length; i++) {
-            result.meshes[i].rotation.y -= 0.02;
+            result.meshes[i].rotation.y -= 0.04;
           }
         }
       }
@@ -767,19 +772,19 @@ var createScene = function () {
 
       newPosition = scene.cameras[1].globalPosition.clone();
 
-      if (newPosition.z > lastPosition.z) {
-        positionBackground -= (newPosition.z - lastPosition.z) * 10;
-        if (positionBackground < 1920) {
-          positionBackground = 1920;
-        }
-        canvas.style.backgroundSize = positionBackground + "px";
-      } else if (newPosition.z < lastPosition.z) {
-        positionBackground -= (newPosition.z - lastPosition.z) * 10;
-        if (positionBackground < 1920) {
-          positionBackground = 1920;
-        }
-        canvas.style.backgroundSize = positionBackground + "px";
-      }
+      // if (newPosition.z > lastPosition.z) {
+      //   positionBackground -= (newPosition.z - lastPosition.z) * 10;
+      //   if (positionBackground < 1920) {
+      //     positionBackground = 1920;
+      //   }
+      //   canvas.style.backgroundSize = positionBackground + "px";
+      // } else if (newPosition.z < lastPosition.z) {
+      //   positionBackground -= (newPosition.z - lastPosition.z) * 10;
+      //   if (positionBackground < 1920) {
+      //     positionBackground = 1920;
+      //   }
+      //   canvas.style.backgroundSize = positionBackground + "px";
+      // }
 
       // if (newPosition.y > lastPosition.y) {
       //   positionBackgroundX += newPosition.y - lastPosition.y;

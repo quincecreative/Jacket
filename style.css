@@ -83,7 +83,8 @@ body::-webkit-scrollbar {
   background: linear-gradient(0deg, rgba(214, 227, 228, 1) 15%, rgba(108, 135, 136, 1) 100%); */
   background-image: url("img/BG.webp");
   background-repeat: no-repeat;
-  background-size: 1920px;
+  /* background-size: 1920px; */
+  background-size: cover;
   background-position: 0 0;
   width: 100vw;
   height: 100vh;
@@ -218,7 +219,7 @@ body::-webkit-scrollbar {
 
 .circle {
   filter: brightness(1.1);
-  width: 70%;
+  width: 80%;
   height: 80%;
   border-radius: 50%;
   display: flex;
@@ -231,7 +232,7 @@ body::-webkit-scrollbar {
 }
 
 .colorChoice {
-  width: 5dvw;
+  width: 8dvh;
   height: 8dvh;
   background-color: rgba(255, 255, 255, 0);
   display: flex;
