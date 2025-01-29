@@ -353,6 +353,9 @@ var createScene = function () {
 
   let progressInterval;
   let estimatedProgress = 1;
+  let video1 = document.getElementById("video1");
+  video1.load();
+  video1.play();
 
   BABYLON.SceneLoader.ImportMeshAsync(
     "",
@@ -360,9 +363,6 @@ var createScene = function () {
     "Jakna Camera 3.glb",
     scene,
     (evt) => {
-      let video = document.getElementById("video1");
-      video.play();
-
       if (evt.lengthComputable) {
         // If the total size is known, use real progress
         estimatedProgress = ((evt.loaded / evt.total) * 100).toFixed();
