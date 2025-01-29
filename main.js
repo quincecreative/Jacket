@@ -356,9 +356,9 @@ var createScene = function () {
 
   let progressInterval;
   let estimatedProgress = 1;
-  // let video1 = document.getElementById("video1");
-  // video1.load();
-  // video1.play();
+  let video1 = document.getElementById("video1");
+  video1.load();
+  video1.play();
   // setTimeout(function () {
   BABYLON.SceneLoader.ImportMeshAsync(
     "",
