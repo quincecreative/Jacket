@@ -362,21 +362,22 @@ var createScene = function () {
     "Jakna Camera 3.glb",
     scene,
     (evt) => {
+      console.log("prolazi");
       if (evt.lengthComputable) {
         // If the total size is known, use real progress
         estimatedProgress = ((evt.loaded / evt.total) * 100).toFixed();
       } else if (!progressInterval) {
         console.log("baga");
         // If total size is unknown, start a progress simulation
-        progressInterval = setInterval(() => {
-          estimatedProgress = Math.min(estimatedProgress + 5, 95); // Prevent going over 95%
-          document.getElementById(
-            "loadingPercentages"
-          ).innerText = `${estimatedProgress}`;
-          document.getElementById(
-            "loadingLine"
-          ).style.width = `${estimatedProgress}%`;
-        }, 500);
+        // progressInterval = setInterval(() => {
+        estimatedProgress = Math.min(estimatedProgress + 5, 95); // Prevent going over 95%
+        document.getElementById(
+          "loadingPercentages"
+        ).innerText = `${estimatedProgress}`;
+        document.getElementById(
+          "loadingLine"
+        ).style.width = `${estimatedProgress}%`;
+        // }, 500);
       }
 
       document.getElementById(
@@ -388,7 +389,7 @@ var createScene = function () {
     }
   ).then((result) => {
     clearInterval(loadinginterval);
-    clearInterval(progressInterval); // Stop simulation when loading completes
+    // clearInterval(progressInterval); // Stop simulation when loading completes
     estimatedProgress = 100;
     document.getElementById("loadingPercentages").innerText = `100`;
     document.getElementById("loadingLine").style.width = `100%`;
