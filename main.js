@@ -352,7 +352,7 @@ var createScene = function () {
   /////////////
 
   let progressInterval;
-  let estimatedProgress = 0;
+  let estimatedProgress = 1;
 
   BABYLON.SceneLoader.ImportMeshAsync(
     "",
