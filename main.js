@@ -1,8 +1,6 @@
 window.onbeforeunload = function () {
   window.scrollTo(0, 0);
-  let video1 = document.getElementById("video1");
-  video1.load();
-  video1.play();
+ 
 };
 var canvas = document.getElementById("renderCanvas");
 
