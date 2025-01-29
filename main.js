@@ -781,13 +781,13 @@ var createScene = function () {
       newPosition = scene.cameras[1].globalPosition.clone();
 
       if (newPosition.z > lastPosition.z) {
-        positionBackground += (newPosition.z - lastPosition.z) * 100;
+        positionBackground += (newPosition.z - lastPosition.z) * 50;
         if (positionBackground < screen.availWidth) {
           positionBackground = screen.availWidth;
         }
         canvas.style.backgroundSize = positionBackground + "px";
       } else if (newPosition.z < lastPosition.z) {
-        positionBackground += (newPosition.z - lastPosition.z) * 100;
+        positionBackground += (newPosition.z - lastPosition.z) * 50;
         if (positionBackground < screen.availWidth) {
           positionBackground = screen.availWidth;
         }
