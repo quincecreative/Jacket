@@ -357,25 +357,21 @@ var createScene = function () {
     "Jakna Camera 3.glb",
     scene,
     (evt) => {
+      let loadedPercent = 1; // Default to 1 to avoid being stuck at 0
       if (evt.lengthComputable) {
-        let loadedPercent = 1; // Default to 1 to avoid being stuck at 0
-        if (evt.lengthComputable) {
-          loadedPercent = ((evt.loaded / evt.total) * 100).toFixed();
-        } else {
-          // Estimate progress based on loaded data
-          loadedPercent = Math.min(loadedPercent + 5, 95); // Prevent reaching 100 prematurely
-        }
-        document.getElementById(
-          "loadingPercentages"
-        ).innerText = `${loadedPercent}%`;
-        document.getElementById(
-          "loadingLine"
-        ).style.width = `${loadedPercent}%`;
+        loadedPercent = ((evt.loaded / evt.total) * 100).toFixed();
+      } else {
+        // Estimate progress based on loaded data
+        loadedPercent = Math.min(loadedPercent + 5, 95); // Prevent reaching 100 prematurely
+      }
+      document.getElementById(
+        "loadingPercentages"
+      ).innerText = `${loadedPercent}%`;
+      document.getElementById("loadingLine").style.width = `${loadedPercent}%`;
 
-        if (loadedPercent == 100) {
-          document.getElementById("loadingText").innerText = "Loaded";
-          clearInterval(loadinginterval);
-        }
+      if (loadedPercent == 100) {
+        document.getElementById("loadingText").innerText = "Loaded";
+        clearInterval(loadinginterval);
       }
     }
   ).then((result) => {
