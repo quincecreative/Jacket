@@ -900,7 +900,7 @@ var createScene = function () {
         };
       });
     });
-  }, 100);
+  }, 1000);
   // let defaultRendering = new BABYLON.DefaultRenderingPipeline("defRend", true, scene);
 
   // defaultRendering.fxaaEnabled = true;
