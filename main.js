@@ -357,31 +357,21 @@ var createScene = function () {
     "Jakna Camera 3.glb",
     scene,
     (evt) => {
-      let loadedPercent = 0;
-      console.log("ovo bitno " + evt.lengthComputable);
       if (evt.lengthComputable) {
-        loadedPercent = ((evt.loaded * 100) / evt.total).toFixed();
+        let loadedPercent = ((evt.loaded / evt.total) * 100).toFixed();
+        document.getElementById(
+          "loadingPercentages"
+        ).innerText = `${loadedPercent}%`;
+        document.getElementById(
+          "loadingLine"
+        ).style.width = `${loadedPercent}%`;
+
+        if (loadedPercent == 100) {
+          document.getElementById("loadingText").innerText = "Loaded";
+          clearInterval(loadinginterval);
+        }
       } else {
-        const dlCount = evt.loaded / (1024 * 1024);
-        loadedPercent = Math.floor(dlCount * 100.0) / 100.0;
-      }
-      document.getElementById(
-        "loadingPercentages"
-      ).innerHTML = `${loadedPercent}`;
-      document.getElementById("loadingLine").style.width = `${loadedPercent}%`;
-      // if (loadedPercent % 5 == 0) {
-      //   document.getElementById("loadingText").innerText =
-      //     "Loading one stitch at a time..";
-      // } else if (loadedPercent % 3 == 0) {
-      //   document.getElementById("loadingText").innerText =
-      //     "Loading one stitch at a time.";
-      // } else {
-      //   document.getElementById("loadingText").innerText =
-      //     "Loading one stitch at a time";
-      // }
-      if (loadedPercent == 100) {
-        clearInterval(loadinginterval);
-        document.getElementById("loadingText").innerText = "Loaded";
+        document.getElementById("loadingText").innerText = "Loading...";
       }
     }
   ).then((result) => {
