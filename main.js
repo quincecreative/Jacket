@@ -35,8 +35,6 @@ var createScene = function () {
   );
   scene.clearColor = new BABYLON.Color4(0, 0, 0, 0);
 
-  console.log(screen.availWidth);
-
   // scene.debugLayer.show({
   //   embedMode: true,
   // });
@@ -362,12 +360,13 @@ var createScene = function () {
     "Jakna Camera 3.glb",
     scene,
     (evt) => {
-      console.log("prolazi");
+      let video = document.getElementById("video1");
+      video.play();
+
       if (evt.lengthComputable) {
         // If the total size is known, use real progress
         estimatedProgress = ((evt.loaded / evt.total) * 100).toFixed();
       } else if (!progressInterval) {
-        console.log("baga");
         // If total size is unknown, start a progress simulation
         // progressInterval = setInterval(() => {
         estimatedProgress = Math.min(estimatedProgress + 5, 95); // Prevent going over 95%
