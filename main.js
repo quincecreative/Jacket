@@ -366,6 +366,7 @@ var createScene = function () {
         // If the total size is known, use real progress
         estimatedProgress = ((evt.loaded / evt.total) * 100).toFixed();
       } else if (!progressInterval) {
+        console.log("baga");
         // If total size is unknown, start a progress simulation
         progressInterval = setInterval(() => {
           estimatedProgress = Math.min(estimatedProgress + 5, 95); // Prevent going over 95%
@@ -398,7 +399,6 @@ var createScene = function () {
     let jakna1 = result.meshes[3]._parentNode;
 
     let xStarting = result.meshes[2].rotation.x;
-    console.log(xStarting);
 
     // jakna.scaling = new BABYLON.Vector3(-4, 4, 4);
     // jakna.position = new BABYLON.Vector3(1, -5, 0);
@@ -549,7 +549,7 @@ var createScene = function () {
       newPosition = scene.activeCamera.globalPosition.clone();
       lastPosition = scene.activeCamera.globalPosition.clone();
     }, 1000);
-    canvas.style.backgroundSize = screen.availWidth + "px";
+    canvas.style.backgroundSize = screen.width + "px";
     console.log(
       Number(
         canvas.style.backgroundSize.slice(
@@ -741,7 +741,7 @@ var createScene = function () {
     // });
 
     //////////////////////
-    let positionBackground = screen.availWidth;
+    let positionBackground = screen.width;
     let positionBackgroundY = 0;
     let positionBackgroundX = 0;
 
@@ -782,14 +782,14 @@ var createScene = function () {
 
       if (newPosition.z > lastPosition.z) {
         positionBackground += (newPosition.z - lastPosition.z) * 50;
-        if (positionBackground < screen.availWidth) {
-          positionBackground = screen.availWidth;
+        if (positionBackground < screen.width) {
+          positionBackground = screen.width;
         }
         canvas.style.backgroundSize = positionBackground + "px";
       } else if (newPosition.z < lastPosition.z) {
         positionBackground += (newPosition.z - lastPosition.z) * 50;
-        if (positionBackground < screen.availWidth) {
-          positionBackground = screen.availWidth;
+        if (positionBackground < screen.width) {
+          positionBackground = screen.width;
         }
         canvas.style.backgroundSize = positionBackground + "px";
       }
