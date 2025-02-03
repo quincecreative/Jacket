@@ -57,8 +57,13 @@ function createSlingShotToPositionAnimation() {
 
   slinfShotToPosition.setKeys(keyFramesrotateToPosition);
   const easingFunction = new BABYLON.ElasticEase();
+  console.log(easingFunction);
+  easingFunction.oscillations =1//3 default
+  easingFunction.springiness = 5//3 default
+  console.log(easingFunction);
   easingFunction.setEasingMode(BABYLON.EasingFunction.EASINGMODE_EASEOUT);
   slinfShotToPosition.setEasingFunction(easingFunction);
+
 }
 
 // const easingFunction = new BABYLON.BounceEase();
@@ -283,6 +288,15 @@ var createScene = async function () {
   result[1].meshes[0].rotationQuaternion = null;
   result[2].meshes[0].rotationQuaternion = null;
 
+  //create plane to cover insde of jacket for shadow
+  let shadowPlane = BABYLON.MeshBuilder.CreateBox("shadowPlane", { width:0.3, height: 0.3, depth: 0.01 }, scene);
+  shadowPlane.position = new BABYLON.Vector3(-0.1,1, 0);
+  shadowPlane.rotation.x = Math.PI / 2;
+
+
+  
+  
+
   //add rotation animation to the jakna
   // jacketRoot.rotation.z = -0.3;
   // jacketRoot.position.x = -0.4;
@@ -315,7 +329,7 @@ var createScene = async function () {
     slinfShotToPosition,
     jacketRoot
   );
-  slingShotToPositionAnimationGroup.speedRatio =1;
+  slingShotToPositionAnimationGroup.speedRatio =0.5;
 
   function startSlingShotAnimation(mesh) {
     console.log(mesh.rotation.y);
@@ -518,6 +532,7 @@ var createScene = async function () {
   shadowGenerator.setDarkness(0);
 
   shadowGenerator.addShadowCaster(jacketRoot, true); //    add shadow caster to the first mesh
+  shadowGenerator.addShadowCaster(shadowPlane, true);
 
   //ENVIORMENT HELPER////////////////////////////////////////////////////////////////////////
   var enviormentHelper = scene.createDefaultEnvironment({
@@ -698,14 +713,17 @@ var createScene = async function () {
   cloudClone4.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
   cloudClone4.rotationQuaternion = null;
   cloudClone4.rotation.x = 1.57;
-  cloudClone4.position = new BABYLON.Vector3(1.3, -1.3, 0);
+  cloudClone4.position = new BABYLON.Vector3(2.1, -1, -0.5);
+  cloudClone4.scaling = new BABYLON.Vector3(1.7,1.7, -1.7);
+
+
 
   let cloudClone5 = cloud3.clone("cloudClone5");
   cloudClone5.isVisible = true;
   cloudClone5.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
   cloudClone5.rotationQuaternion = null;
   cloudClone5.rotation.x = 1.57;
-  cloudClone5.position = new BABYLON.Vector3(-1.7, -1.9, 1);
+  cloudClone5.position = new BABYLON.Vector3(-1.4, -2.5, 3);
 
   let cloudClone6 = cloud2.clone("cloudClone6");
   cloudClone6.isVisible = true;
@@ -727,8 +745,8 @@ var createScene = async function () {
   cloudClone8.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
   cloudClone8.rotationQuaternion = null;
   cloudClone8.rotation.x = 1.57;
-
-  cloudClone8.position = new BABYLON.Vector3(-2.5, -2, 0);
+cloudClone8.position = new BABYLON.Vector3(-2.5, -2, 0);
+cloudClone8.scaling = new BABYLON.Vector3(1.5,1.5, -1.5);
 
   let cloudClone9 = cloud1.clone("cloudClone9");
   cloudClone9.isVisible = true;
@@ -867,13 +885,14 @@ var createScene = async function () {
     "3px solid #e1ff00";
   let outerMenuOpen = false;
 
-  outerColorArrow.onclick = () => {
+  outerColorButtonsContainer.onmouseenter = () => {
     if (outerMenuOpen) {
       closeMenu(
         outerColorButtonsContainer2,
         outerArrowButton,
         "68px",
         outerColorButtons,
+
         activeOuterColor
       );
       outerMenuOpen = false;
@@ -910,6 +929,17 @@ var createScene = async function () {
     }
   };
 
+  outerColorButtonsContainer.onmouseleave = () => {
+    closeMenu(
+      outerColorButtonsContainer2,
+      outerArrowButton,
+      "68px",
+      outerColorButtons,
+
+      activeOuterColor
+    );
+    outerMenuOpen = false;
+  }
   //inner color menu
   const innerColorButtons = document.getElementsByClassName(
     "innerColorButtonContainer"
@@ -947,13 +977,14 @@ var createScene = async function () {
     "3px solid #e1ff00";
   let innerMenuOpen = false;
 
-  innerColorArrow.onclick = () => {
+  innerColorButtonsContainer.onmouseenter = () => {
     if (innerMenuOpen) {
       closeMenu(
         innerColorButtonsContainer2,
         innerArrowButton,
         "68px",
         innerColorButtons,
+
         activeInnerColor
       );
       innerMenuOpen = false;
@@ -990,9 +1021,22 @@ var createScene = async function () {
     }
   };
 
-  //textile menu
+  innerColorButtonsContainer.onmouseleave = () => {
+    closeMenu(
+      innerColorButtonsContainer2,
+      innerArrowButton,
+      "68px",
+      innerColorButtons,
 
+      activeInnerColor
+    );
+    innerMenuOpen = false;
+  }
+
+  //textile menu
+// texture 1
   let texture1 = scene.getMaterialByName("InnerColor(Stripes)").bumpTexture;
+  
   let texture1Ambient = new BABYLON.Texture(
     "Shadows10(Linije)2k.jpg",
     scene
@@ -1002,7 +1046,9 @@ var createScene = async function () {
   texture1Ambient.uScale = 1;
   texture1Ambient.vScale = -1;
 
+  let texture1Normal = scene.getMaterialByName("InnerColor(Stripes)").bumpTexture;
 
+//texture 2
   let texture2 = new BABYLON.Texture(
     "fabric_129_normal-2K.jpg",
     scene
@@ -1021,13 +1067,21 @@ var createScene = async function () {
   texture2Ambient.uScale = 1;
   texture2Ambient.vScale = -1;
 
+  let texture2Normal = new BABYLON.Texture(
+    "Normal(Textile)2k.jpg",
+    scene
+  );
+  texture2Normal.uOffset = 0;
+  texture2Normal.vOffset = 0;
+  texture2Normal.uScale = 20;
+  texture2Normal.vScale = -20;
 
 
   const textileButtons = document.getElementsByClassName(
     "textileButtonContainer"
   );
 
-  let textures = [[texture2, texture2Ambient], [texture1, texture1Ambient]]
+  let textures = [[texture2, texture2Ambient, texture2Normal], [texture1, texture1Ambient, texture1Normal]]
 
 
 
@@ -1051,6 +1105,8 @@ var createScene = async function () {
           scene.getMaterialByName("Outer Color(Stripes)").lightmapTexture = textures[activeTextile][1];
           scene.getMaterialByName("InnerColor(Stripes)").useLightmapAsShadowmap = true;
           scene.getMaterialByName("Outer Color(Stripes)").useLightmapAsShadowmap = true;
+          scene.getMaterialByName("InnerColor(Stripes)").bumpTexture = textures[activeTextile][2];
+          scene.getMaterialByName("Outer Color(Stripes)").bumpTexture = textures[activeTextile][2];
         }, 385);//half of the animation time
 
 
@@ -1066,7 +1122,7 @@ var createScene = async function () {
     "3px solid #e1ff00";
   let textileMenuOpen = false;
 
-  textileArrow.onclick = () => {
+  textileButtonsContainer.onmouseenter = () => {
     if (textileMenuOpen) {
       closeMenu(
         textileButtonsContainer2,
@@ -1098,17 +1154,27 @@ var createScene = async function () {
 
       if (innerMenuOpen) {
         closeMenu(
-          innerColorButtonsContainer2,
-          innerArrowButton,
+          textileButtonsContainer2,
+          textileArrowButton,
           "68px",
-          innerColorButtons,
-          activeInnerColor
+          textileButtons,
+          activeTextile
         );
-        innerMenuOpen = false;
+        textileMenuOpen = false;
       }
     }
   };
 
+  textileButtonsContainer.onmouseleave = () => {
+    closeMenu(
+      textileButtonsContainer2,
+      textileArrowButton,
+      "68px",
+      textileButtons,
+      activeTextile
+    );
+    textileMenuOpen = false;
+  }
   //END OF SCENE////////////////////////////////////////////////////////////////////////
   scene.executeWhenReady(() => {
     setTimeout(() => {

@@ -226,7 +226,7 @@ body {
 
 #sustainableMaterialsZone {
   position: fixed;
-  bottom: 30dvh;
+  top: 5dvh;
   left: 4dvw;
   color: var(--detailsColor);
   font-size: 3vw;
