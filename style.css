@@ -38,6 +38,7 @@ body {
   background-color: #0f0f0f;
   opacity: 0;
   gap: 20px;
+  z-index: 1000;
   /* transition: opacity 1s ease-in-out; */
   /* display: none; */
 }
