@@ -362,11 +362,18 @@ var createScene = async function () {
   scene.getMaterialByName("InnerColor(Stripes)").bumpTexture.level = 1;
   scene.getMaterialByName("Outer Color(Stripes)").bumpTexture.level = 1;
 
+  //set beaige inner material
+  scene.getMaterialByName("InnerColor(Stripes)").albedoColor =  new BABYLON.Color3.FromHexString("#615e4e");//#757261
+
+  // set white outer material
+  // scene.getMaterialByName("Outer Color(Stripes)").albedoColor =  new BABYLON.Color3.FromHexString("#808080");//#8a8a8a
+
 
   //BLENDER CAMERA////////////////////////////////////////////////////////////////////////
   //.position.clone()
   scene.activeCamera = scene.cameras[1];
   scene.activeCamera.fov = 0.45;
+
   // scene.activeCamera.attachControl(canvas, true);
   scene.animationGroups[0].pause();
 
@@ -857,7 +864,7 @@ cloudClone8.scaling = new BABYLON.Vector3(1.5,1.5, -1.5);
   const outerColorButtons = document.getElementsByClassName(
     "outerColorButtonContainer"
   );
-  let outerColors = ["#896309", "#8e8a76", "#242424", "#020202"];
+  let outerColors = ["#896309", "#808080", "#242424", "#101010"];
 
   for (let i = 0; i < outerColorButtons.length; i++) {
     outerColorButtons[i].addEventListener("click", () => {
@@ -946,7 +953,7 @@ cloudClone8.scaling = new BABYLON.Vector3(1.5,1.5, -1.5);
     "innerColorButtonContainer"
   );
 
-  let innerColors = ["#896309", "#8e8a76", "#242424", "#020202"];
+  let innerColors = ["#896309", "#615e4e", "#242424", "#101010"];
 
   for (let i = 0; i < innerColorButtons.length; i++) {
     innerColorButtons[i].addEventListener("click", () => {
@@ -1055,8 +1062,9 @@ cloudClone8.scaling = new BABYLON.Vector3(1.5,1.5, -1.5);
   );
   texture2Normal.uOffset = 0;
   texture2Normal.vOffset = 0;
-  texture2Normal.uScale = 1;
-  texture2Normal.vScale = -1;
+  texture2Normal.uScale = 2.5;
+  texture2Normal.vScale = -2.5;
+
 
 
   let texture2Ambient = new BABYLON.Texture(
