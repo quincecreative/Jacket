@@ -1036,8 +1036,9 @@ cloudClone8.scaling = new BABYLON.Vector3(1.5,1.5, -1.5);
 
   //textile menu
 // texture 1
-  let texture1 = scene.getMaterialByName("InnerColor(Stripes)").bumpTexture;
+  let texture1Normal = scene.getMaterialByName("InnerColor(Stripes)").bumpTexture;
   
+
   let texture1Ambient = new BABYLON.Texture(
     "Shadows10(Linije)2k.jpg",
     scene
@@ -1047,17 +1048,16 @@ cloudClone8.scaling = new BABYLON.Vector3(1.5,1.5, -1.5);
   texture1Ambient.uScale = 1;
   texture1Ambient.vScale = -1;
 
-  let texture1Normal = scene.getMaterialByName("InnerColor(Stripes)").bumpTexture;
-
 //texture 2
-  let texture2 = new BABYLON.Texture(
+  let texture2Normal = new BABYLON.Texture(
     "fabric_129_normal-2K.jpg",
     scene
   );
-  texture2.uOffset = 0;
-  texture2.vOffset = 0;
-  texture2.uScale = 20;
-  texture2.vScale = -20;
+  texture2Normal.uOffset = 0;
+  texture2Normal.vOffset = 0;
+  texture2Normal.uScale = 1;
+  texture2Normal.vScale = -1;
+
 
   let texture2Ambient = new BABYLON.Texture(
     "Shadows10(Textile)2k.jpg",
@@ -1068,21 +1068,12 @@ cloudClone8.scaling = new BABYLON.Vector3(1.5,1.5, -1.5);
   texture2Ambient.uScale = 1;
   texture2Ambient.vScale = -1;
 
-  let texture2Normal = new BABYLON.Texture(
-    "Normal(Textile)2k.jpg",
-    scene
-  );
-  texture2Normal.uOffset = 0;
-  texture2Normal.vOffset = 0;
-  texture2Normal.uScale = 20;
-  texture2Normal.vScale = -20;
-
 
   const textileButtons = document.getElementsByClassName(
     "textileButtonContainer"
   );
 
-  let textures = [[texture2, texture2Ambient, texture2Normal], [texture1, texture1Ambient, texture1Normal]]
+    let textures = [[texture2Normal, texture2Ambient], [texture1Normal, texture1Ambient,]]
 
 
 
@@ -1106,8 +1097,6 @@ cloudClone8.scaling = new BABYLON.Vector3(1.5,1.5, -1.5);
           scene.getMaterialByName("Outer Color(Stripes)").lightmapTexture = textures[activeTextile][1];
           scene.getMaterialByName("InnerColor(Stripes)").useLightmapAsShadowmap = true;
           scene.getMaterialByName("Outer Color(Stripes)").useLightmapAsShadowmap = true;
-          scene.getMaterialByName("InnerColor(Stripes)").bumpTexture = textures[activeTextile][2];
-          scene.getMaterialByName("Outer Color(Stripes)").bumpTexture = textures[activeTextile][2];
         }, 385);//half of the animation time
 
 
