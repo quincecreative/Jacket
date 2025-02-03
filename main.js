@@ -248,11 +248,12 @@ var createScene = async function () {
       null,
       scene,
       (evt) => {
+        console.log(evt);
         if (evt.lengthComputable) {
           loadePercent = (evt.loaded * 100) / evt.total;
           loadePercent = loadePercent.toFixed();
         } else {
-          loadePercent = (evt.loaded * 100) / 2245516;
+          loadePercent = (evt.loaded * 100) / 2152548;
           loadePercent = loadePercent.toFixed();
         }
         loadingPercentages.innerHTML = `${loadePercent}%`;
