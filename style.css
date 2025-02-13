@@ -44,10 +44,20 @@ body {
 }
 
 #video1 {
-  width: 50%;
-  height: 50%;
+  width: 60%;
+  height: 60%;
   object-fit: cover;
   overflow: hidden;
+}
+
+#loadingText {
+  color: white;
+  font-size: 30px;
+  font-weight:400;
+}
+
+#loadingLineContainer {
+  width: 15%;
 }
 
 #loadingLine {
@@ -58,7 +68,7 @@ body {
 
 #loadingPercentages {
   color: white;
-  font-size: 22px;
+  font-size:35px;
   font-weight: 600;
 }
 

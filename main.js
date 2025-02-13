@@ -256,8 +256,8 @@ var createScene = async function () {
           loadePercent = (evt.loaded * 100) / 2152548;
           loadePercent = loadePercent.toFixed();
         }
-        loadingPercentages.innerHTML = `${loadePercent}%`;
-        loadingLine.style.width = `${loadePercent * 0.2}%`;
+        loadingPercentages.innerHTML = `${loadePercent}`;
+        loadingLine.style.width = `${loadePercent}%`;
       }
     ),
     BABYLON.SceneLoader.ImportMeshAsync(
