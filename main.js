@@ -58,7 +58,7 @@ function createSlingShotToPositionAnimation() {
   slinfShotToPosition.setKeys(keyFramesrotateToPosition);
   const easingFunction = new BABYLON.ElasticEase();
   console.log(easingFunction);
-  easingFunction.oscillations =1//3 default
+  easingFunction.oscillations = 1//3 default
   easingFunction.springiness = 5//3 default
   console.log(easingFunction);
   easingFunction.setEasingMode(BABYLON.EasingFunction.EASINGMODE_EASEOUT);
@@ -269,11 +269,18 @@ var createScene = async function () {
     ),
     BABYLON.SceneLoader.ImportMeshAsync(
       "",
-      "clouds.glb",
+      "light4.glb",
       null,
       scene,
       (evt) => { }
     ),
+    // BABYLON.SceneLoader.ImportMeshAsync(
+    //   "",
+    //   "clouds.glb",
+    //   null,
+    //   scene,
+    //   (evt) => { }
+    // ),
   ]);
 
   // document.getElementById("testDiv").onclick = () => {
@@ -290,13 +297,16 @@ var createScene = async function () {
   result[2].meshes[0].rotationQuaternion = null;
 
   //create plane to cover insde of jacket for shadow
-  let shadowPlane = BABYLON.MeshBuilder.CreateBox("shadowPlane", { width:0.3, height: 0.3, depth: 0.01 }, scene);
-  shadowPlane.position = new BABYLON.Vector3(-0.1,1, 0);
+  let shadowPlane = BABYLON.MeshBuilder.CreateBox("shadowPlane", { width: 0.3, height: 0.3, depth: 0.01 }, scene);
+  shadowPlane.position = new BABYLON.Vector3(-0.1, 1, 0);
   shadowPlane.rotation.x = Math.PI / 2;
 
+  let cameraAnimation = scene.getAnimationGroupByName("KameraAnimacija")
+  let lightRaysAnimation = scene.getAnimationGroupByName("Take 001")
+  lightRaysAnimation.play(true)
 
-  
-  
+console.log(scene.animationGroups)
+
 
   //add rotation animation to the jakna
   // jacketRoot.rotation.z = -0.3;
@@ -311,7 +321,7 @@ var createScene = async function () {
   rotateYAnimationGroup.speedRatio = 1.3;
 
   function playRotateYAnimation() {
-    scene.animationGroups[1].play(false);
+    scene.animationGroups[2].play(false);
     console.log(jacketRoot.rotation.y);
     setTimeout(() => {
       jacketRoot.rotation.y = 0;
@@ -330,13 +340,13 @@ var createScene = async function () {
     slinfShotToPosition,
     jacketRoot
   );
-  slingShotToPositionAnimationGroup.speedRatio =0.5;
+  slingShotToPositionAnimationGroup.speedRatio = 0.5;
 
   function startSlingShotAnimation(mesh) {
     console.log(mesh.rotation.y);
-    scene.animationGroups[2]._targetedAnimations[0].animation._keys[0].value =
+    scene.animationGroups[3]._targetedAnimations[0].animation._keys[0].value =
       mesh.rotation.y;
-    scene.animationGroups[2].play(false);
+    scene.animationGroups[3].play(false);
   }
 
   //SET MATERIALS////////////////////////////////////////////////////////////////////////
@@ -363,7 +373,7 @@ var createScene = async function () {
   scene.getMaterialByName("Outer Color(Stripes)").bumpTexture.level = 1;
 
   //set beaige inner material
-  scene.getMaterialByName("InnerColor(Stripes)").albedoColor =  new BABYLON.Color3.FromHexString("#615e4e");//#757261
+  scene.getMaterialByName("InnerColor(Stripes)").albedoColor = new BABYLON.Color3.FromHexString("#615e4e");//#757261
 
   // set white outer material
   // scene.getMaterialByName("Outer Color(Stripes)").albedoColor =  new BABYLON.Color3.FromHexString("#808080");//#8a8a8a
@@ -375,7 +385,7 @@ var createScene = async function () {
   scene.activeCamera.fov = 0.45;
 
   // scene.activeCamera.attachControl(canvas, true);
-  scene.animationGroups[0].pause();
+  cameraAnimation.pause();
 
   //ROTATION OF MESH/////////////////////////////////////////////////////////////////
 
@@ -429,7 +439,7 @@ var createScene = async function () {
   };
 
   canvas.addEventListener("pointerdown", function (evt) {
-    scene.animationGroups[2].stop();//stop slinshot animation
+    scene.animationGroups[3].stop();//stop slinshot animation
     currentPosition.x = evt.clientX;
     // currentPosition.y = evt.clientY;
     currentRotation.x = jacketRoot.rotation.x;
@@ -545,12 +555,13 @@ var createScene = async function () {
   //ENVIORMENT HELPER////////////////////////////////////////////////////////////////////////
   var enviormentHelper = scene.createDefaultEnvironment({
     enableGroundShadow: true,
+    skyboxSize: 100,
     // cameraExposure: 0.01
   });
-  enviormentHelper.setMainColor(BABYLON.Color3.FromHexString("#738890")); //6f8a94 #738890 #708a93 #517891 #a0d9ef #64707f #080808
-  enviormentHelper.ground.position.y = 0.7;
+  enviormentHelper.setMainColor(BABYLON.Color3.FromHexString("#303b40")); // #738890 #6f8a94 #738890 #708a93 #517891 #a0d9ef #64707f #303b40
+  enviormentHelper.ground.position.y = -0.1;
 
-      //CONTRAST AND EXPOSURE////////////////////////////////////////////////////////////////////////
+  //CONTRAST AND EXPOSURE////////////////////////////////////////////////////////////////////////
   // console.log(
   //   scene.imageProcessingConfiguration.exposure,
   //   scene.imageProcessingConfiguration.contrast
@@ -590,7 +601,7 @@ var createScene = async function () {
   function updateScroll() {
 
     // console.log(currentScrollPosition);
-    
+
     currentScrollPosition = lerp(
       currentScrollPosition,
       targetScrollPosition,
@@ -605,7 +616,7 @@ var createScene = async function () {
       }, 1200);
     }
 
-    if (scene && scene.animationGroups[0] && currentScrollPosition > 1000) {
+    if (scene && cameraAnimation && currentScrollPosition > 1000) {
       newValue = currentScrollPosition;
 
       if (oldValue < newValue) {
@@ -618,9 +629,9 @@ var createScene = async function () {
       oldValue = newValue;
 
       if (window.innerWidth > window.innerHeight) {
-        scene.animationGroups[0].goToFrame(frame);
+        cameraAnimation.goToFrame(frame);
       } else {
-        scene.animationGroups[0].goToFrame(frame);
+        cameraAnimation.goToFrame(frame);
       }
     }
 
@@ -683,86 +694,94 @@ var createScene = async function () {
   document.documentElement.style.scrollBehavior = "smooth";
 
 
-  //CLOUDS////////////////////////////////////////////////////////////////////////
-  // console.log(result[2].meshes);
-  let cloud1 = result[2].meshes[1];
-  let cloud2 = result[2].meshes[2];
-  let cloud3 = result[2].meshes[3];
+  //BACKGROUND LIGHT////////////////////////////////////////////////////////////////////////
 
-  cloud1.isVisible = false;
-  cloud2.isVisible = false;
-  cloud3.isVisible = false;
-
-  // CLONE AND CREATE CLOUDS
-  let cloudClone1 = cloud1.clone("cloudClone1");
-  cloudClone1.isVisible = true;
-  cloudClone1.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
-  cloudClone1.rotationQuaternion = null;
-  cloudClone1.rotation.x = 1.57;
-  cloudClone1.position = new BABYLON.Vector3(1, -2, 1);
-  cloudClone1.visibility = 0.3;
-
-  let cloudClone2 = cloud2.clone("cloudClone2");
-  cloudClone2.isVisible = true;
-  cloudClone2.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
-  cloudClone2.rotationQuaternion = null;
-  cloudClone2.rotation.x = 1.57;
-  cloudClone2.position = new BABYLON.Vector3(-1, -1.3, 0.5);
-
-  let cloudClone3 = cloud3.clone("cloudClone3");
-  cloudClone3.isVisible = true;
-  cloudClone3.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
-  cloudClone3.rotationQuaternion = null;
-  cloudClone3.rotation.x = 1.57;
-  cloudClone3.position = new BABYLON.Vector3(-1.5, -0.8, 0);
-
-  let cloudClone4 = cloud3.clone("cloudClone4");
-  cloudClone4.isVisible = true;
-  cloudClone4.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
-  cloudClone4.rotationQuaternion = null;
-  cloudClone4.rotation.x = 1.57;
-  cloudClone4.position = new BABYLON.Vector3(2.1, -1, -0.5);
-  cloudClone4.scaling = new BABYLON.Vector3(1.7,1.7, -1.7);
+  let backgroundLight =  result[2].meshes[0]
+  // backgroundLight.scaling = new BABYLON.Vector3(1,1,1);
+  backgroundLight.position = new BABYLON.Vector3(0, 0, 2);
+  backgroundLight.rotation.y = 1.2;
 
 
+  //   //CLOUDS////////////////////////////////////////////////////////////////////////
+  //   // console.log(result[2].meshes);
+  //   let cloud1 = result[2].meshes[1];
+  //   let cloud2 = result[2].meshes[2];
+  //   let cloud3 = result[2].meshes[3];
 
-  let cloudClone5 = cloud3.clone("cloudClone5");
-  cloudClone5.isVisible = true;
-  cloudClone5.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
-  cloudClone5.rotationQuaternion = null;
-  cloudClone5.rotation.x = 1.57;
-  cloudClone5.position = new BABYLON.Vector3(-1.4, -2.5, 3);
+  //   cloud1.isVisible = false;
+  //   cloud2.isVisible = false;
+  //   cloud3.isVisible = false;
 
-  let cloudClone6 = cloud2.clone("cloudClone6");
-  cloudClone6.isVisible = true;
-  cloudClone6.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
-  cloudClone6.rotationQuaternion = null;
-  cloudClone6.rotation.x = 1.57;
-  cloudClone6.position = new BABYLON.Vector3(2.4, -2.4, 2);
+  //   // CLONE AND CREATE CLOUDS
+  //   let cloudClone1 = cloud1.clone("cloudClone1");
+  //   cloudClone1.isVisible = true;
+  //   cloudClone1.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
+  //   cloudClone1.rotationQuaternion = null;
+  //   cloudClone1.rotation.x = 1.57;
+  //   cloudClone1.position = new BABYLON.Vector3(1, -2, 1);
+  //   cloudClone1.visibility = 0.3;
 
-  let cloudClone7 = cloud2.clone("cloudClone7");
-  cloudClone7.isVisible = true;
-  cloudClone7.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
-  cloudClone7.rotationQuaternion = null;
-  cloudClone7.rotation.x = 1.57;
+  //   let cloudClone2 = cloud2.clone("cloudClone2");
+  //   cloudClone2.isVisible = true;
+  //   cloudClone2.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
+  //   cloudClone2.rotationQuaternion = null;
+  //   cloudClone2.rotation.x = 1.57;
+  //   cloudClone2.position = new BABYLON.Vector3(-1, -1.3, 0.5);
 
-  cloudClone7.position = new BABYLON.Vector3(0, -1.6, 1);
+  //   let cloudClone3 = cloud3.clone("cloudClone3");
+  //   cloudClone3.isVisible = true;
+  //   cloudClone3.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
+  //   cloudClone3.rotationQuaternion = null;
+  //   cloudClone3.rotation.x = 1.57;
+  //   cloudClone3.position = new BABYLON.Vector3(-1.5, -0.8, 0);
 
-  let cloudClone8 = cloud3.clone("cloudClone8");
-  cloudClone8.isVisible = true;
-  cloudClone8.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
-  cloudClone8.rotationQuaternion = null;
-  cloudClone8.rotation.x = 1.57;
-cloudClone8.position = new BABYLON.Vector3(-2.5, -2, 0);
-cloudClone8.scaling = new BABYLON.Vector3(1.5,1.5, -1.5);
+  //   let cloudClone4 = cloud3.clone("cloudClone4");
+  //   cloudClone4.isVisible = true;
+  //   cloudClone4.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
+  //   cloudClone4.rotationQuaternion = null;
+  //   cloudClone4.rotation.x = 1.57;
+  //   cloudClone4.position = new BABYLON.Vector3(2.1, -1, -0.5);
+  //   cloudClone4.scaling = new BABYLON.Vector3(1.7,1.7, -1.7);
 
-  let cloudClone9 = cloud1.clone("cloudClone9");
-  cloudClone9.isVisible = true;
-  cloudClone9.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
-  cloudClone9.rotationQuaternion = null;
-  cloudClone9.rotation.x = 1.57;
 
-  cloudClone9.position = new BABYLON.Vector3(0, -2.5, 1);
+
+  //   let cloudClone5 = cloud3.clone("cloudClone5");
+  //   cloudClone5.isVisible = true;
+  //   cloudClone5.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
+  //   cloudClone5.rotationQuaternion = null;
+  //   cloudClone5.rotation.x = 1.57;
+  //   cloudClone5.position = new BABYLON.Vector3(-1.4, -2.5, 3);
+
+  //   let cloudClone6 = cloud2.clone("cloudClone6");
+  //   cloudClone6.isVisible = true;
+  //   cloudClone6.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
+  //   cloudClone6.rotationQuaternion = null;
+  //   cloudClone6.rotation.x = 1.57;
+  //   cloudClone6.position = new BABYLON.Vector3(2.4, -2.4, 2);
+
+  //   let cloudClone7 = cloud2.clone("cloudClone7");
+  //   cloudClone7.isVisible = true;
+  //   cloudClone7.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
+  //   cloudClone7.rotationQuaternion = null;
+  //   cloudClone7.rotation.x = 1.57;
+
+  //   cloudClone7.position = new BABYLON.Vector3(0, -1.6, 1);
+
+  //   let cloudClone8 = cloud3.clone("cloudClone8");
+  //   cloudClone8.isVisible = true;
+  //   cloudClone8.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
+  //   cloudClone8.rotationQuaternion = null;
+  //   cloudClone8.rotation.x = 1.57;
+  // cloudClone8.position = new BABYLON.Vector3(-2.5, -2, 0);
+  // cloudClone8.scaling = new BABYLON.Vector3(1.5,1.5, -1.5);
+
+  //   let cloudClone9 = cloud1.clone("cloudClone9");
+  //   cloudClone9.isVisible = true;
+  //   cloudClone9.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
+  //   cloudClone9.rotationQuaternion = null;
+  //   cloudClone9.rotation.x = 1.57;
+
+  //   cloudClone9.position = new BABYLON.Vector3(0, -2.5, 1);
 
 
 
@@ -1042,9 +1061,9 @@ cloudClone8.scaling = new BABYLON.Vector3(1.5,1.5, -1.5);
   }
 
   //textile menu
-// texture 1
+  // texture 1
   let texture1Normal = scene.getMaterialByName("InnerColor(Stripes)").bumpTexture;
-  
+
 
   let texture1Ambient = new BABYLON.Texture(
     "Shadows10(Linije)2k.jpg",
@@ -1055,7 +1074,7 @@ cloudClone8.scaling = new BABYLON.Vector3(1.5,1.5, -1.5);
   texture1Ambient.uScale = 1;
   texture1Ambient.vScale = -1;
 
-//texture 2
+  //texture 2
   let texture2Normal = new BABYLON.Texture(
     "fabric_129_normal-2K.jpg",
     scene
@@ -1081,7 +1100,7 @@ cloudClone8.scaling = new BABYLON.Vector3(1.5,1.5, -1.5);
     "textileButtonContainer"
   );
 
-    let textures = [[texture2Normal, texture2Ambient], [texture1Normal, texture1Ambient,]]
+  let textures = [[texture2Normal, texture2Ambient], [texture1Normal, texture1Ambient,]]
 
 
 
@@ -1098,7 +1117,7 @@ cloudClone8.scaling = new BABYLON.Vector3(1.5,1.5, -1.5);
           }
         }
         playRotateYAnimation();
-      setTimeout(() => {
+        setTimeout(() => {
           scene.getMaterialByName("InnerColor(Stripes)").bumpTexture = textures[activeTextile][0];
           scene.getMaterialByName("Outer Color(Stripes)").bumpTexture = textures[activeTextile][0];
           scene.getMaterialByName("InnerColor(Stripes)").lightmapTexture = textures[activeTextile][1];
@@ -1173,6 +1192,62 @@ cloudClone8.scaling = new BABYLON.Vector3(1.5,1.5, -1.5);
     );
     textileMenuOpen = false;
   }
+
+  //PARTICLE SYSTEM////////////////////////////////////////////////////////////////////////
+  var fountain = BABYLON.Mesh.CreateBox("foutain", 0.1, scene);
+  fountain.visibility = 1;
+  fountain.position = new BABYLON.Vector3(-0.05, 1.3, 0);
+
+  // Create a particle system
+  var particleSystem;
+  var useGPUVersion = true;
+
+  var createNewSystem = function () {
+    if (particleSystem) {
+      particleSystem.dispose();
+    }
+
+    if (useGPUVersion && BABYLON.GPUParticleSystem.IsSupported) {
+      particleSystem = new BABYLON.GPUParticleSystem("particles", { capacity: 1000 }, scene);
+      particleSystem.activeParticleCount = 2000;
+    } else {
+      particleSystem = new BABYLON.ParticleSystem("particles", 1000, scene);
+    }
+
+    particleSystem.emitRate = 100;
+    particleSystem.particleEmitterType = new BABYLON.SphereParticleEmitter(1);
+    particleSystem.particleTexture = new BABYLON.Texture("flare.png", scene);
+    particleSystem.maxLifeTime = 10;
+    particleSystem.minSize = 0.01;
+    particleSystem.maxSize = 0.01;
+    particleSystem.emitter = fountain;
+    particleSystem.updateSpeed = 0.1
+
+    particleSystem.start();
+  }
+
+  createNewSystem();
+  setTimeout(() => {
+    particleSystem.updateSpeed = 0.001
+  }, 1000);
+
+
+  // var alpha = 0;
+  // var moveEmitter = false;
+  // var rotateEmitter = false;
+
+  // scene.registerBeforeRender(function() {
+  //     if (moveEmitter) {
+  //         fountain.position.x = 5 * Math.cos(alpha);
+  //         fountain.position.z = 5 * Math.sin(alpha);
+  //     }
+
+  //     if (rotateEmitter) {
+  //         fountain.rotation.x += 0.01;
+  //     }
+
+  //     alpha += 0.01;
+  // });
   //END OF SCENE////////////////////////////////////////////////////////////////////////
   scene.executeWhenReady(() => {
     setTimeout(() => {
