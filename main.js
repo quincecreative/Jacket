@@ -1244,7 +1244,7 @@ console.log(scene.animationGroups)
   var fountain = BABYLON.Mesh.CreateBox("foutain", 0.1, scene);
   fountain.visibility = 0;
   fountain.position = new BABYLON.Vector3(-0.05, -1, 10);
-  // fountain.rotation = new BABYLON.Vector3(0, 0, -0.7);
+  fountain.rotation = new BABYLON.Vector3(0, 0, -0.7);
 
   // Create a particle system
   var particleSystem;
