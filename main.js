@@ -187,9 +187,9 @@ var createScene = async function () {
   engine.displayLoadingUI();
   // This creates a basic Babylon Scene object (non-mesh)
   var scene = new BABYLON.Scene(engine);
-  scene.clearColor = new BABYLON.Color4(0, 0, 0, 0);
+  // scene.clearColor = new BABYLON.Color4(0, 0, 0, 0);
   // scene.clearColor = BABYLON.Color3.FromHexString("#ffffff");
-  // scene.clearColor = BABYLON.Color3.FromHexString("#1b1b1b");
+  scene.clearColor = BABYLON.Color3.FromHexString("#3d4960");
 
   //BABYLON CAMERA////////////////////////////////////////////////////////////////////////
   //camera starting position to try to match blender camera
@@ -547,24 +547,61 @@ console.log(scene.animationGroups)
 
 
   //SHADOWS////////////////////////////////////////////////////////////////////////
-  var shadowGenerator = new BABYLON.ShadowGenerator(256, dirLight);
-  shadowGenerator.useBlurExponentialShadowMap = true;
-  shadowGenerator.useKernelBlur = true;
-  shadowGenerator.blurKernel = 64;
-  shadowGenerator.setDarkness(0);
+  // var ground01 = BABYLON.MeshBuilder.CreateCylinder("cylinder", {height: 0.01, diameter: 100});
+  // ground01.position = new BABYLON.Vector3(-0.05, 0.2, 0);
+  // // ground01.addRotation(0.1, 0, 0);
 
-  shadowGenerator.addShadowCaster(jacketRoot, true); //    add shadow caster to the first mesh
-  shadowGenerator.addShadowCaster(shadowPlane, true);
+  // var groundMaterial = new BABYLON.PBRMaterial("pbr", scene);
+  // groundMaterial.reflectionTexture = new BABYLON.MirrorTexture("mirror", 1024, scene, true);
+  // groundMaterial.reflectionTexture.mirrorPlane = new BABYLON.Plane(0, -1.0, 0, 0.5);
+  // groundMaterial.reflectionTexture.level = 0.6;
+  // groundMaterial.reflectionTexture.adaptiveBlurKernel =64;
 
+  // ground01.material = groundMaterial;
+
+//   var mirror = BABYLON.Mesh.CreateBox("Mirror", 1.0, scene);
+//   mirror.scaling = new BABYLON.Vector3(100.0, 0.01, 100.0);
+//   mirror.material = new BABYLON.StandardMaterial("mirror", scene);
+//   mirror.material.reflectionTexture = new BABYLON.MirrorTexture("mirror", 1024, scene, true);
+//   mirror.material.reflectionTexture.mirrorPlane = new BABYLON.Plane(0, -1.0, 0, 0.5);
+//   // mirror.material.reflectionTexture.renderList = [knot];
+//   mirror.material.reflectionTexture.level = 0.5;
+//   mirror.material.reflectionTexture.adaptiveBlurKernel = 32;
+// mirror.position = new BABYLON.Vector3(0, -1, 0);
+
+//   for (let i = 0; i < result[0].meshes.length; i++) {
+//     if (i > 0) {
+//       mirror.material.reflectionTexture.renderList.push(result[0].meshes[i])
+//     }
+//   }
+
+
+//   // var shadowGenerator = new BABYLON.ShadowGenerator(256, dirLight);
+//   // shadowGenerator.useBlurExponentialShadowMap = true;
+//   // shadowGenerator.useKernelBlur = true;
+//   // shadowGenerator.blurKernel = 64;
+//   // shadowGenerator.setDarkness(0);
+
+//   // shadowGenerator.addShadowCaster(jacketRoot, true); //    add shadow caster to the first mesh
+//   // shadowGenerator.addShadowCaster(shadowPlane, true);
+
+
+//   // ground01.receiveShadows = true;
+
+//       // // Fog
+//       scene.fogMode = BABYLON.Scene.FOGMODE_LINEAR;
+//       scene.fogColor = scene.clearColor;
+//       scene.fogStart = 5.0;
+//       scene.fogEnd = 50.0;
   //ENVIORMENT HELPER////////////////////////////////////////////////////////////////////////
-  var enviormentHelper = scene.createDefaultEnvironment({
-    enableGroundShadow: true,
-    skyboxSize: 100,
-    // cameraExposure: 0.01
-  });
-  enviormentHelper.setMainColor(BABYLON.Color3.FromHexString("#303b40")); // #738890 #6f8a94 #738890 #708a93 #517891rgb(50, 74, 83)#202933 #303b40 #000000
-  enviormentHelper.ground.position.y = -0.1;
-
+  // var enviormentHelper = scene.createDefaultEnvironment({
+  //   enableGroundShadow: true,
+  //   skyboxSize: 1,
+  //   // cameraExposure: 0.01
+  // });
+  // enviormentHelper.setMainColor(BABYLON.Color3.FromHexString("#0f1725")); //#09224e #000000 #303b40 #0f1725
+  // enviormentHelper.ground.position.y =-1;
+  // 0f1725
   //CONTRAST AND EXPOSURE////////////////////////////////////////////////////////////////////////
   // console.log(
   //   scene.imageProcessingConfiguration.exposure,
@@ -701,8 +738,8 @@ console.log(scene.animationGroups)
   //BACKGROUND LIGHT////////////////////////////////////////////////////////////////////////
 
   let backgroundLight =  result[2].meshes[0]
-  // backgroundLight.scaling = new BABYLON.Vector3(1,1,1);
-  backgroundLight.position = new BABYLON.Vector3(0, 0, 2);
+  // backgroundLight.scaling = new BABYLON.Vector3(0.2,0.2,0.2);
+  backgroundLight.position = new BABYLON.Vector3(-0.4, 0, 2);
   backgroundLight.rotation.y = 1.2;
 
 
@@ -1243,7 +1280,7 @@ console.log(scene.animationGroups)
   //PARTICLE SYSTEM////////////////////////////////////////////////////////////////////////
   var fountain = BABYLON.Mesh.CreateBox("foutain", 0.1, scene);
   fountain.visibility = 0;
-  fountain.position = new BABYLON.Vector3(-0.05, -1, 10);
+  fountain.position = new BABYLON.Vector3(-1.5,0, 10);
   fountain.rotation = new BABYLON.Vector3(0, 0, -0.7);
 
   // Create a particle system
@@ -1256,9 +1293,9 @@ console.log(scene.animationGroups)
     }
 
     if (useGPUVersion && BABYLON.GPUParticleSystem.IsSupported) {
-      particleSystem = new BABYLON.GPUParticleSystem("particles", { capacity: 10000 }, scene);
-      particleSystem.activeParticleCount =10000;
-      particleSystem.emitRate = 1000;
+      particleSystem = new BABYLON.GPUParticleSystem("particles", { capacity: 2000 }, scene);
+      particleSystem.activeParticleCount = 2000;
+      particleSystem.emitRate = 2000;
       console.log("GPU version");
     } else {
       particleSystem = new BABYLON.ParticleSystem("particles", 1000, scene);
@@ -1268,18 +1305,18 @@ console.log(scene.animationGroups)
 
     particleSystem.particleEmitterType = new BABYLON.SphereDirectedParticleEmitter(9);
     particleSystem.particleTexture = new BABYLON.Texture("flare.png", scene);
-    particleSystem.minLifeTime = 5;
-    particleSystem.maxLifeTime = 10;
-    particleSystem.minSize = 0.007;
-    particleSystem.maxSize = 0.04;
+    particleSystem.minLifeTime = 1;
+    particleSystem.maxLifeTime = 5;
+    particleSystem.minSize = 0.01;
+    particleSystem.maxSize = 0.02;
     // particleSystem.minEmitPower = 1;
     // particleSystem.maxEmitPower = 3;
     particleSystem.emitter = fountain;
     particleSystem.updateSpeed = 0.2
 
-    particleSystem.color1 = new BABYLON.Color4(0.1, 0.1, 0.1, 1);
-    particleSystem.color2 = new BABYLON.Color4(0.5, 0.5, 0.5, 1);
-    particleSystem.colorDead = new BABYLON.Color4(0, 0, 0.2, 0);
+    // particleSystem.color1 = new BABYLON.Color4(0.1, 0.1, 0.1, 1);
+    // particleSystem.color2 = new BABYLON.Color4(0.5, 0.5, 0.5, 1);
+    // particleSystem.colorDead = new BABYLON.Color4(0, 0, 0.2, 0);
 
 
     particleSystem.start();
@@ -1289,6 +1326,60 @@ console.log(scene.animationGroups)
     particleSystem.maxAngularSpeed = 1.4;
 
     particleSystem.translationPivot = new BABYLON.Vector2(0.3, 0.3);
+
+    // particleSystem.addSizeGradient(0, 0.007, 0.008); //size range at start of particle lifetime
+    // // particleSystem.addSizeGradient(0.5, 0.007, 0.007); //size range at start of particle lifetime
+    // particleSystem.addSizeGradient(1.0, 0.1, 0.11); //size range at end of particle lifetime
+
+    // particleSystem.addSizeGradient(0, 0.01, 0.02); //size range at start of particle lifetime
+    // particleSystem.addSizeGradient(1.0, 0.05, 0.1); //size range at end of particle lifetime
+
+        // increasing then decreasing size over lifetime
+      //   for (let i = 0; i <= 2; i += 0.05) {
+      //     particleSystem.addSizeGradient(i / 2, 0.5 * (1 - (i - 1) * (i - 1)));
+      // }
+
+      particleSystem.addColorGradient(0, new BABYLON.Color4(0.5, 0.5, 0.5, 1)); //color at start of particle lifetime
+
+      particleSystem.addColorGradient(0.09, new BABYLON.Color4(1, 1, 1, 1)); //color at start of particle lifetime
+      particleSystem.addColorGradient(0.1, new BABYLON.Color4(0.1, 0.1, 0.1, 1)); //color at 2/5 of particle lifetime
+      particleSystem.addColorGradient(0.11, new BABYLON.Color4(1, 1, 1, 1)); //color at 2/5 of particle lifetime
+
+      particleSystem.addColorGradient(0.19, new BABYLON.Color4(1, 1, 1, 1)); //color at start of particle lifetime
+      particleSystem.addColorGradient(0.2, new BABYLON.Color4(0.1, 0.1, 0.1, 1)); //color at 2/5 of particle lifetime
+      particleSystem.addColorGradient(0.21, new BABYLON.Color4(1, 1, 1, 1)); //color at 2/5 of particle lifetime
+
+      particleSystem.addColorGradient(0.29, new BABYLON.Color4(1, 1, 1, 1)); //color at start of particle lifetime
+      particleSystem.addColorGradient(0.3, new BABYLON.Color4(0.1, 0.1, 0.1, 1)); //color at 2/5 of particle lifetime
+      particleSystem.addColorGradient(0.31, new BABYLON.Color4(1, 1, 1, 1)); //color at 2/5 of particle lifetime
+
+      particleSystem.addColorGradient(0.39, new BABYLON.Color4(1, 1, 1, 1)); //color at start of particle lifetime
+      particleSystem.addColorGradient(0.4, new BABYLON.Color4(0.1, 0.1, 0.1, 1)); //color at 2/5 of particle lifetime
+      particleSystem.addColorGradient(0.41, new BABYLON.Color4(1, 1, 1, 1)); //color at 2/5 of particle lifetime
+
+      particleSystem.addColorGradient(0.49, new BABYLON.Color4(1, 1, 1, 1)); //color at start of particle lifetime
+      particleSystem.addColorGradient(0.5, new BABYLON.Color4(0.1, 0.1, 0.1, 1)); //color at 2/5 of particle lifetime
+      particleSystem.addColorGradient(0.51, new BABYLON.Color4(1, 1, 1, 1)); //color at 2/5 of particle lifetime
+
+      
+        particleSystem.addColorGradient(0.59, new BABYLON.Color4(1, 1, 1, 1)); //color at start of particle lifetime
+      particleSystem.addColorGradient(0.6, new BABYLON.Color4(0.1, 0.1, 0.1, 1)); //color at 2/5 of particle lifetime
+      particleSystem.addColorGradient(0.61, new BABYLON.Color4(1, 1, 1, 1)); //color at 2/5 of particle lifetime
+
+      particleSystem.addColorGradient(0.69, new BABYLON.Color4(1, 1, 1, 1)); //color at start of particle lifetime
+      particleSystem.addColorGradient(0.7, new BABYLON.Color4(0.1, 0.1, 0.1, 1)); //color at 2/5 of particle lifetime
+      particleSystem.addColorGradient(0.71, new BABYLON.Color4(1, 1, 1, 1)); //color at 2/5 of particle lifetime
+
+      particleSystem.addColorGradient(0.79, new BABYLON.Color4(1, 1, 1, 1)); //color at start of particle lifetime
+      particleSystem.addColorGradient(0.8, new BABYLON.Color4(0.1, 0.1, 0.1, 1)); //color at 2/5 of particle lifetime
+      particleSystem.addColorGradient(0.81, new BABYLON.Color4(1, 1, 1, 1)); //color at 2/5 of particle lifetime
+
+      particleSystem.addColorGradient(0.89, new BABYLON.Color4(1, 1, 1, 1)); //color at start of particle lifetime
+      particleSystem.addColorGradient(0.9, new BABYLON.Color4(0.1, 0.1, 0.1, 1)); //color at 2/5 of particle lifetime
+      particleSystem.addColorGradient(0.91, new BABYLON.Color4(1, 1, 1, 1)); //color at 2/5 of particle lifetime
+
+      particleSystem.addColorGradient(1, new BABYLON.Color4(0.5, 0.5, 0.5, 1)); //color at end of particle lifetime
+
   }
 
   
