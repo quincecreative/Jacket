@@ -34,7 +34,7 @@ body {
   align-items: center;
   flex-direction: column;
   overflow: hidden I;
-  background-color: #0f0f0f;
+  background-color: #ffffff;
   opacity: 1;
   gap: 20px;
   z-index: 1000;
@@ -50,7 +50,7 @@ body {
 }
 
 #loadingText {
-  color: white;
+  color: #0f0f0f;
   font-size: 30px;
   font-weight:400;
 }
@@ -62,11 +62,11 @@ body {
 #loadingLine {
   width: 0;
   height: 4px;
-  background-color: white;
+  background-color: #0f0f0f;
 }
 
 #loadingPercentages {
-  color: white;
+  color: #0f0f0f;
   font-size:35px;
   font-weight: 600;
 }
@@ -82,7 +82,7 @@ body {
 }
 
 #scrollText {
-  color: white;
+  color: #0f0f0f;
   font-size: 22px;
 }
 
@@ -98,8 +98,8 @@ body {
   display: block;
   width: 10px;
   height: 10px;
-  border-right: 2px solid #ffffff;
-  border-bottom: 2px solid #ffffff;
+  border-right: 2px solid #0f0f0f;
+  border-bottom: 2px solid #0f0f0f;
   transform: rotate(45deg);
   margin: 0 auto;
   animation: arrowBounce 1.5s ease-in-out infinite;
@@ -451,11 +451,11 @@ box-sizing: border-box;
 
 #menuMainTitle {
   width: 100%;
-  border-top: 1px solid #242424;
+  border-top: 1px solid #505050;
   font-weight: 600;
 
   font-size: 18px;
-  color: #242424;
+  color: #505050;
 }
 
 /* canvas zone //////////////////////////////////////////////*/
