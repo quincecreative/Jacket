@@ -168,7 +168,7 @@ BABYLON.DefaultLoadingScreen.prototype.displayLoadingUI = function () {
 BABYLON.DefaultLoadingScreen.prototype.hideLoadingUI = function () {
   // loadingPage.remove();
   // document.getElementById('customLoadingScreenDiv').style.display = 'none';
-  document.getElementById("scrollTo").style.opacity = 1;
+  // document.getElementById("scrollTo").style.opacity = 1;
 };
 //end of loading
 
@@ -189,8 +189,8 @@ var createScene = async function () {
   var scene = new BABYLON.Scene(engine);
   // scene.clearColor = new BABYLON.Color4(0, 0, 0, 0);
   // scene.clearColor = BABYLON.Color3.FromHexString("#ffffff");
-  scene.clearColor = BABYLON.Color3.FromHexString("#3d4960");
-
+  scene.clearColor = BABYLON.Color3.FromHexString("#93939e");//#C3C3CF//#3d4960
+  // scene.clearColor = BABYLON.Color3.FromHexString("#3d4960");
   //BABYLON CAMERA////////////////////////////////////////////////////////////////////////
   //camera starting position to try to match blender camera
   let satrtingPosX = 0; //0.03
@@ -256,7 +256,7 @@ var createScene = async function () {
           loadePercent = (evt.loaded * 100) / 2152548;
           loadePercent = loadePercent.toFixed();
         }
-        loadingPercentages.innerHTML = `${loadePercent}`;
+        // loadingPercentages.innerHTML = `${loadePercent}`;
         loadingLine.style.width = `${loadePercent}%`;
       }
     ),
@@ -547,6 +547,29 @@ console.log(scene.animationGroups)
 
 
   //SHADOWS////////////////////////////////////////////////////////////////////////
+//   // SHADOWS
+//   var shadowGenerator = new BABYLON.ShadowGenerator(128, dirLight);
+//   shadowGenerator.useBlurExponentialShadowMap = true;
+//   shadowGenerator.useKernelBlur = true;
+//   shadowGenerator.blurKernel = 16;
+//   shadowGenerator.setDarkness(0.8);
+
+//   var ground = BABYLON.MeshBuilder.CreateGround(
+//     "ground",
+//     { width: 10, height: 10 },
+//     scene
+//   );
+//   ground.position = new BABYLON.Vector3(0, 0.3, 0)
+// ground.receiveShadows = true;
+// ground.material = new BABYLON.ShadowOnlyMaterial('mat', scene)
+
+//   for (let i = 0; i < result[0].meshes.length; i++) {
+//     shadowGenerator.addShadowCaster(result[0].meshes[i], true);
+//   }
+
+//   shadowGenerator.addShadowCaster(shadowPlane, true);
+
+
   // var ground01 = BABYLON.MeshBuilder.CreateCylinder("cylinder", {height: 0.01, diameter: 100});
   // ground01.position = new BABYLON.Vector3(-0.05, 0.2, 0);
   // // ground01.addRotation(0.1, 0, 0);
@@ -582,8 +605,8 @@ console.log(scene.animationGroups)
 //   // shadowGenerator.blurKernel = 64;
 //   // shadowGenerator.setDarkness(0);
 
-//   // shadowGenerator.addShadowCaster(jacketRoot, true); //    add shadow caster to the first mesh
-//   // shadowGenerator.addShadowCaster(shadowPlane, true);
+  // shadowGenerator.addShadowCaster(jacketRoot, true); //    add shadow caster to the first mesh
+  // shadowGenerator.addShadowCaster(shadowPlane, true);
 
 
 //   // ground01.receiveShadows = true;
@@ -1299,7 +1322,7 @@ console.log(scene.animationGroups)
       console.log("GPU version");
     } else {
       particleSystem = new BABYLON.ParticleSystem("particles", 1000, scene);
-      particleSystem.emitRate = 100;
+      particleSystem.emitRate = 1000;
       console.log("CPU version");
     }
 
