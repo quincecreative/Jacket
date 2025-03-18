@@ -189,12 +189,13 @@ var createScene = async function () {
   var scene = new BABYLON.Scene(engine);
   // scene.clearColor = new BABYLON.Color4(0, 0, 0, 0);
   // scene.clearColor = BABYLON.Color3.FromHexString("#ffffff");
-  scene.clearColor = BABYLON.Color3.FromHexString("#93939e");//#C3C3CF//#3d4960
+  // scene.clearColor = BABYLON.Color3.FromHexString("#93939e");//#C3C3CF//#3d4960
+  scene.clearColor = BABYLON.Color3.FromHexString("#C3C3CF");
   // scene.clearColor = BABYLON.Color3.FromHexString("#3d4960");
   //BABYLON CAMERA////////////////////////////////////////////////////////////////////////
   //camera starting position to try to match blender camera
-  let satrtingPosX = 0; //0.03
-  let satrtingPosY = 1.3; //0.95
+  // let satrtingPosX = 0; //0.03
+  // let satrtingPosY = 1.3; //0.95
   var camera = new BABYLON.ArcRotateCamera(
     "Camera",
     0,
@@ -203,25 +204,25 @@ var createScene = async function () {
     new BABYLON.Vector3(0, 0, 0),
     scene
   );
-  camera.attachControl(canvas, true);
-  camera.setPosition(new BABYLON.Vector3(satrtingPosX, satrtingPosY, 4.05));
-  camera.lowerBetaLimit = 0.5;
+  // camera.attachControl(canvas, true);
+  // camera.setPosition(new BABYLON.Vector3(satrtingPosX, satrtingPosY, 4.05));
+  // camera.lowerBetaLimit = 0.5;
 
-  camera.attachControl(canvas, true);
-  camera.minZ = 0.01;
-  camera.lowerRadiusLimit = 2;
-  camera.upperRadiusLimit = 20;
-  camera.wheelDeltaPercentage = 0.01;
+  // camera.attachControl(canvas, true);
+  // camera.minZ = 0.01;
+  // camera.lowerRadiusLimit = 2;
+  // camera.upperRadiusLimit = 20;
+  // camera.wheelDeltaPercentage = 0.01;
 
-  // viewCamera.pinchDeltaPercentage = 100
-  camera.useNaturalPinchZoom = true;
-  // console.log(viewCamera.useNaturalPinchZoom)
+  // // viewCamera.pinchDeltaPercentage = 100
+  // camera.useNaturalPinchZoom = true;
+  // // console.log(viewCamera.useNaturalPinchZoom)
 
-  delete camera.lowerBetaLimit;
-  delete camera.upperBetaLimit;
+  // delete camera.lowerBetaLimit;
+  // delete camera.upperBetaLimit;
 
   // viewCamera.upperBetaLimit = 1.8;
-  camera.fov = 0.5;
+  // camera.fov = 0.5;
   //   camera.target = scene.getMeshByName("Animator");
 
   // camera.inputs.attached.keyboard.detachControl();
@@ -229,15 +230,15 @@ var createScene = async function () {
   // camera.angularSensibilityX = 1000000;
   // camera.angularSensibilityY = 1000000;
 
-  // camera target
-  var cameraTarget = new BABYLON.MeshBuilder.CreateBox(
-    "cameraTarget",
-    { width: 1, height: 1, depth: 1 },
-    scene
-  );
-  cameraTarget.position = new BABYLON.Vector3(satrtingPosX, satrtingPosY, 0);
-  camera.target = cameraTarget;
-  cameraTarget.isVisible = false;
+  // // camera target
+  // var cameraTarget = new BABYLON.MeshBuilder.CreateBox(
+  //   "cameraTarget",
+  //   { width: 1, height: 1, depth: 1 },
+  //   scene
+  // );
+  // cameraTarget.position = new BABYLON.Vector3(satrtingPosX, satrtingPosY, 0);
+  // camera.target = cameraTarget;
+  // cameraTarget.isVisible = false;
 
   //LOAD MESHES////////////////////////////////////////////////////////////////////////
   let loadePercent = 0;
