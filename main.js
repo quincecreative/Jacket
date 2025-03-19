@@ -1,10 +1,12 @@
+//DEVICE ORIENTATION////////////////////////////////////////////////////////////////////////
+const isMobile = window.matchMedia('(pointer: coarse)').matches;
+
 //ROTATE ANIMATION////////////////////////////////////////////////////////////////////////
 ////animacija za rotiranje jakne kad promenis boju
 let rotateY;
 function createRotateYAnimation() {
   rotateY = new BABYLON.Animation(
     "rotateY",
-
     "rotation.y",
     60,
     BABYLON.Animation.ANIMATIONTYPE_FLOAT,
@@ -22,11 +24,6 @@ function createRotateYAnimation() {
     frame: 60,
     value: 2 * Math.PI,
   });
-
-  // keyFramesrotateY.push({
-  //   frame: 60,
-  //   value: 0,
-  // });
   rotateY.setKeys(keyFramesrotateY);
   const easingFunction = new BABYLON.CircleEase();
   easingFunction.setEasingMode(BABYLON.EasingFunction.EASINGMODE_EASEINOUT);
@@ -57,25 +54,13 @@ function createSlingShotToPositionAnimation() {
 
   slinfShotToPosition.setKeys(keyFramesrotateToPosition);
   const easingFunction = new BABYLON.ElasticEase();
-  console.log(easingFunction);
   easingFunction.oscillations = 1//3 default
   easingFunction.springiness = 5//3 default
-  console.log(easingFunction);
   easingFunction.setEasingMode(BABYLON.EasingFunction.EASINGMODE_EASEOUT);
   slinfShotToPosition.setEasingFunction(easingFunction);
 
 }
-
-// const easingFunction = new BABYLON.BounceEase();
-// easingFunction.setEasingMode(BABYLON.EasingFunction.EASINGMODE_EASEOUT);
-
-// const easingFunction = new BABYLON.ElasticEase();
-// easingFunction.setEasingMode(BABYLON.EasingFunction.EASINGMODE_EASEOUT);
-
-//slinjg shot rotate to get beack to original position
-
 //STOP SCROLL UNTIOL LOADED////////////////////////////////////////////////////////////////////////
-
 // left: 37, up: 38, right: 39, down: 40,
 // spacebar: 32, pageup: 33, pagedown: 34, end: 35, home: 36
 var keys = { 37: 1, 38: 1, 39: 1, 40: 1 };
@@ -204,41 +189,6 @@ var createScene = async function () {
     new BABYLON.Vector3(0, 0, 0),
     scene
   );
-  // camera.attachControl(canvas, true);
-  // camera.setPosition(new BABYLON.Vector3(satrtingPosX, satrtingPosY, 4.05));
-  // camera.lowerBetaLimit = 0.5;
-
-  // camera.attachControl(canvas, true);
-  // camera.minZ = 0.01;
-  // camera.lowerRadiusLimit = 2;
-  // camera.upperRadiusLimit = 20;
-  // camera.wheelDeltaPercentage = 0.01;
-
-  // // viewCamera.pinchDeltaPercentage = 100
-  // camera.useNaturalPinchZoom = true;
-  // // console.log(viewCamera.useNaturalPinchZoom)
-
-  // delete camera.lowerBetaLimit;
-  // delete camera.upperBetaLimit;
-
-  // viewCamera.upperBetaLimit = 1.8;
-  // camera.fov = 0.5;
-  //   camera.target = scene.getMeshByName("Animator");
-
-  // camera.inputs.attached.keyboard.detachControl();
-
-  // camera.angularSensibilityX = 1000000;
-  // camera.angularSensibilityY = 1000000;
-
-  // // camera target
-  // var cameraTarget = new BABYLON.MeshBuilder.CreateBox(
-  //   "cameraTarget",
-  //   { width: 1, height: 1, depth: 1 },
-  //   scene
-  // );
-  // cameraTarget.position = new BABYLON.Vector3(satrtingPosX, satrtingPosY, 0);
-  // camera.target = cameraTarget;
-  // cameraTarget.isVisible = false;
 
   //LOAD MESHES////////////////////////////////////////////////////////////////////////
   let loadePercent = 0;
@@ -249,7 +199,6 @@ var createScene = async function () {
       null,
       scene,
       (evt) => {
-        console.log(evt);
         if (evt.lengthComputable) {
           loadePercent = (evt.loaded * 100) / evt.total;
           loadePercent = loadePercent.toFixed();
@@ -275,20 +224,7 @@ var createScene = async function () {
       scene,
       (evt) => { }
     ),
-    // BABYLON.SceneLoader.ImportMeshAsync(
-    //   "",
-    //   "dust_looping_rigged_animation_10mb_free2.glb",
-    //   null,
-    //   scene,
-    //   (evt) => { }
-    // ),
   ]);
-
-  // document.getElementById("testDiv").onclick = () => {
-  //   console.log("clicked");
-  //   // scene.animationGroups[1].play(false); //rotating animacija
-  //   startSlingShotAnimation(jacketRoot);
-  // };
 
   let jacketRoot = result[0].meshes[0];
 
@@ -296,10 +232,6 @@ var createScene = async function () {
   jacketRoot.rotationQuaternion = null;
   result[1].meshes[0].rotationQuaternion = null;
   result[2].meshes[0].rotationQuaternion = null;
-  // for (let i = 0; i < result[2].meshes.length; i++) {
-  //   result[2].meshes[i].isVisible = false;
-  // }
-  // result[3].meshes[0].rotationQuaternion = null;
 
   //create plane to cover insde of jacket for shadow
   let shadowPlane = BABYLON.MeshBuilder.CreateBox("shadowPlane", { width: 0.3, height: 0.3, depth: 0.01 }, scene);
@@ -310,14 +242,6 @@ var createScene = async function () {
   let lightRaysAnimation = scene.getAnimationGroupByName("Take 001")
   lightRaysAnimation.play(true)
 
-console.log(scene.animationGroups)
-
-
-  //add rotation animation to the jakna
-  // jacketRoot.rotation.z = -0.3;
-  // jacketRoot.position.x = -0.4;
-
-
   createRotateYAnimation();
   const rotateYAnimationGroup = new BABYLON.AnimationGroup(
     "rotateYAnimationGroup"
@@ -327,13 +251,10 @@ console.log(scene.animationGroups)
 
   function playRotateYAnimation() {
     scene.getAnimationGroupByName("rotateYAnimationGroup").play(false);
-    console.log(jacketRoot.rotation.y);
     setTimeout(() => {
       jacketRoot.rotation.y = 0;
-      console.log(jacketRoot.rotation.y);
     }, 800);//get back to 0 when rotation is done
   }
-console.log(scene.animationGroups)
 
 
   createSlingShotToPositionAnimation();
@@ -348,7 +269,6 @@ console.log(scene.animationGroups)
   slingShotToPositionAnimationGroup.speedRatio = 0.5;
 
   function startSlingShotAnimation(mesh) {
-    console.log(mesh.rotation.y);
     scene.getAnimationGroupByName("slingShotToPositionAnimationGroup")._targetedAnimations[0].animation._keys[0].value =
       mesh.rotation.y;
     scene.getAnimationGroupByName("slingShotToPositionAnimationGroup").play(false);
@@ -363,7 +283,6 @@ console.log(scene.animationGroups)
       result[0].meshes[i].material.name === "TextileColor"
     ) {
       result[0].meshes[i].material.lightmapTexture = new BABYLON.Texture(
-        // "Shadows10(Linije)4k.png",
         "Shadows10(Linije)2k.jpg",
         scene
       );
@@ -373,7 +292,6 @@ console.log(scene.animationGroups)
     }
   }
 
-  //   console.log(result[0].meshes[3].material.bumpTexture.level)
   scene.getMaterialByName("InnerColor(Stripes)").bumpTexture.level = 1;
   scene.getMaterialByName("Outer Color(Stripes)").bumpTexture.level = 1;
 
@@ -508,34 +426,6 @@ console.log(scene.animationGroups)
   light2.specular = new BABYLON.Color3(1, 0.8, -0.6);
   light2.intensity = 3;//3.9
 
-  // let light3Pos = new BABYLON.Vector3(1, 2.3, 0.3);
-  // let light3fake = new BABYLON.MeshBuilder.CreateBox(
-  //   "light3fake",
-  //   { width: 0.1, height: 0.1, depth: 0.1 },
-  //   scene
-  // );
-  // light3fake.position = light3Pos;
-  // light3fake.isVisible = false;
-
-  // const light3 = new BABYLON.PointLight("light3", light3Pos, scene);
-  // light3.diffuse = new BABYLON.Color3(1, 1, 1);
-  // light3.specular = new BABYLON.Color3(1, 0.8, -0.6);
-  // light3.intensity = 1;
-
-  // let light4Pos = new BABYLON.Vector3(-1, 2.3, 0.3);
-  // let light4fake = new BABYLON.MeshBuilder.CreateBox(
-  //   "light4fake",
-  //   { width: 0.1, height: 0.1, depth: 0.1 },
-  //   scene
-  // );
-  // light4fake.position = light4Pos;
-  // light4fake.isVisible = false;
-
-  // const light4 = new BABYLON.PointLight("light4", light4Pos, scene);
-  // light4.diffuse = new BABYLON.Color3(1, 1, 1);
-  // light4.specular = new BABYLON.Color3(1, 0.8, 0.6);
-  // light4.intensity = 1;
-
   //ENVIRONMENT////////////////////////////////////////////////////////////////////////
   scene.environmentTexture = new BABYLON.CubeTexture(
     "studio.env",
@@ -548,27 +438,27 @@ console.log(scene.animationGroups)
 
 
   //SHADOWS////////////////////////////////////////////////////////////////////////
-//   // SHADOWS
-//   var shadowGenerator = new BABYLON.ShadowGenerator(128, dirLight);
-//   shadowGenerator.useBlurExponentialShadowMap = true;
-//   shadowGenerator.useKernelBlur = true;
-//   shadowGenerator.blurKernel = 16;
-//   shadowGenerator.setDarkness(0.8);
+  //   // SHADOWS
+  //   var shadowGenerator = new BABYLON.ShadowGenerator(128, dirLight);
+  //   shadowGenerator.useBlurExponentialShadowMap = true;
+  //   shadowGenerator.useKernelBlur = true;
+  //   shadowGenerator.blurKernel = 16;
+  //   shadowGenerator.setDarkness(0.8);
 
-//   var ground = BABYLON.MeshBuilder.CreateGround(
-//     "ground",
-//     { width: 10, height: 10 },
-//     scene
-//   );
-//   ground.position = new BABYLON.Vector3(0, 0.3, 0)
-// ground.receiveShadows = true;
-// ground.material = new BABYLON.ShadowOnlyMaterial('mat', scene)
+  //   var ground = BABYLON.MeshBuilder.CreateGround(
+  //     "ground",
+  //     { width: 10, height: 10 },
+  //     scene
+  //   );
+  //   ground.position = new BABYLON.Vector3(0, 0.3, 0)
+  // ground.receiveShadows = true;
+  // ground.material = new BABYLON.ShadowOnlyMaterial('mat', scene)
 
-//   for (let i = 0; i < result[0].meshes.length; i++) {
-//     shadowGenerator.addShadowCaster(result[0].meshes[i], true);
-//   }
+  //   for (let i = 0; i < result[0].meshes.length; i++) {
+  //     shadowGenerator.addShadowCaster(result[0].meshes[i], true);
+  //   }
 
-//   shadowGenerator.addShadowCaster(shadowPlane, true);
+  //   shadowGenerator.addShadowCaster(shadowPlane, true);
 
 
   // var ground01 = BABYLON.MeshBuilder.CreateCylinder("cylinder", {height: 0.01, diameter: 100});
@@ -583,40 +473,40 @@ console.log(scene.animationGroups)
 
   // ground01.material = groundMaterial;
 
-//   var mirror = BABYLON.Mesh.CreateBox("Mirror", 1.0, scene);
-//   mirror.scaling = new BABYLON.Vector3(100.0, 0.01, 100.0);
-//   mirror.material = new BABYLON.StandardMaterial("mirror", scene);
-//   mirror.material.reflectionTexture = new BABYLON.MirrorTexture("mirror", 1024, scene, true);
-//   mirror.material.reflectionTexture.mirrorPlane = new BABYLON.Plane(0, -1.0, 0, 0.5);
-//   // mirror.material.reflectionTexture.renderList = [knot];
-//   mirror.material.reflectionTexture.level = 0.5;
-//   mirror.material.reflectionTexture.adaptiveBlurKernel = 32;
-// mirror.position = new BABYLON.Vector3(0, -1, 0);
+  //   var mirror = BABYLON.Mesh.CreateBox("Mirror", 1.0, scene);
+  //   mirror.scaling = new BABYLON.Vector3(100.0, 0.01, 100.0);
+  //   mirror.material = new BABYLON.StandardMaterial("mirror", scene);
+  //   mirror.material.reflectionTexture = new BABYLON.MirrorTexture("mirror", 1024, scene, true);
+  //   mirror.material.reflectionTexture.mirrorPlane = new BABYLON.Plane(0, -1.0, 0, 0.5);
+  //   // mirror.material.reflectionTexture.renderList = [knot];
+  //   mirror.material.reflectionTexture.level = 0.5;
+  //   mirror.material.reflectionTexture.adaptiveBlurKernel = 32;
+  // mirror.position = new BABYLON.Vector3(0, -1, 0);
 
-//   for (let i = 0; i < result[0].meshes.length; i++) {
-//     if (i > 0) {
-//       mirror.material.reflectionTexture.renderList.push(result[0].meshes[i])
-//     }
-//   }
+  //   for (let i = 0; i < result[0].meshes.length; i++) {
+  //     if (i > 0) {
+  //       mirror.material.reflectionTexture.renderList.push(result[0].meshes[i])
+  //     }
+  //   }
 
 
-//   // var shadowGenerator = new BABYLON.ShadowGenerator(256, dirLight);
-//   // shadowGenerator.useBlurExponentialShadowMap = true;
-//   // shadowGenerator.useKernelBlur = true;
-//   // shadowGenerator.blurKernel = 64;
-//   // shadowGenerator.setDarkness(0);
+  //   // var shadowGenerator = new BABYLON.ShadowGenerator(256, dirLight);
+  //   // shadowGenerator.useBlurExponentialShadowMap = true;
+  //   // shadowGenerator.useKernelBlur = true;
+  //   // shadowGenerator.blurKernel = 64;
+  //   // shadowGenerator.setDarkness(0);
 
   // shadowGenerator.addShadowCaster(jacketRoot, true); //    add shadow caster to the first mesh
   // shadowGenerator.addShadowCaster(shadowPlane, true);
 
 
-//   // ground01.receiveShadows = true;
+  //   // ground01.receiveShadows = true;
 
-//       // // Fog
-//       scene.fogMode = BABYLON.Scene.FOGMODE_LINEAR;
-//       scene.fogColor = scene.clearColor;
-//       scene.fogStart = 5.0;
-//       scene.fogEnd = 50.0;
+  //       // // Fog
+  //       scene.fogMode = BABYLON.Scene.FOGMODE_LINEAR;
+  //       scene.fogColor = scene.clearColor;
+  //       scene.fogStart = 5.0;
+  //       scene.fogEnd = 50.0;
   //ENVIORMENT HELPER////////////////////////////////////////////////////////////////////////
   // var enviormentHelper = scene.createDefaultEnvironment({
   //   enableGroundShadow: true,
@@ -665,14 +555,12 @@ console.log(scene.animationGroups)
   // Create a new animation loop for smooth scrolling
   function updateScroll() {
 
-    // console.log(currentScrollPosition);
-
     currentScrollPosition = lerp(
       currentScrollPosition,
       targetScrollPosition,
       smoothFactor
     );
-    // console.log(currentScrollPosition);
+
     //loading screen
     if (currentScrollPosition > 50) {
       loadingScreen.style.opacity = 0;
@@ -761,156 +649,10 @@ console.log(scene.animationGroups)
 
   //BACKGROUND LIGHT////////////////////////////////////////////////////////////////////////
 
-  let backgroundLight =  result[2].meshes[0]
+  let backgroundLight = result[2].meshes[0]
   // backgroundLight.scaling = new BABYLON.Vector3(0.2,0.2,0.2);
   backgroundLight.position = new BABYLON.Vector3(-0.4, 0, 2);
   backgroundLight.rotation.y = 1.2;
-
-
-  //   //CLOUDS////////////////////////////////////////////////////////////////////////
-  //   // console.log(result[2].meshes);
-  //   let cloud1 = result[2].meshes[1];
-  //   let cloud2 = result[2].meshes[2];
-  //   let cloud3 = result[2].meshes[3];
-
-  //   cloud1.isVisible = false;
-  //   cloud2.isVisible = false;
-  //   cloud3.isVisible = false;
-
-  //   // CLONE AND CREATE CLOUDS
-  //   let cloudClone1 = cloud1.clone("cloudClone1");
-  //   cloudClone1.isVisible = true;
-  //   cloudClone1.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
-  //   cloudClone1.rotationQuaternion = null;
-  //   cloudClone1.rotation.x = 1.57;
-  //   cloudClone1.position = new BABYLON.Vector3(1, -2, 1);
-  //   cloudClone1.visibility = 0.3;
-
-  //   let cloudClone2 = cloud2.clone("cloudClone2");
-  //   cloudClone2.isVisible = true;
-  //   cloudClone2.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
-  //   cloudClone2.rotationQuaternion = null;
-  //   cloudClone2.rotation.x = 1.57;
-  //   cloudClone2.position = new BABYLON.Vector3(-1, -1.3, 0.5);
-
-  //   let cloudClone3 = cloud3.clone("cloudClone3");
-  //   cloudClone3.isVisible = true;
-  //   cloudClone3.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
-  //   cloudClone3.rotationQuaternion = null;
-  //   cloudClone3.rotation.x = 1.57;
-  //   cloudClone3.position = new BABYLON.Vector3(-1.5, -0.8, 0);
-
-  //   let cloudClone4 = cloud3.clone("cloudClone4");
-  //   cloudClone4.isVisible = true;
-  //   cloudClone4.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
-  //   cloudClone4.rotationQuaternion = null;
-  //   cloudClone4.rotation.x = 1.57;
-  //   cloudClone4.position = new BABYLON.Vector3(2.1, -1, -0.5);
-  //   cloudClone4.scaling = new BABYLON.Vector3(1.7,1.7, -1.7);
-
-
-
-  //   let cloudClone5 = cloud3.clone("cloudClone5");
-  //   cloudClone5.isVisible = true;
-  //   cloudClone5.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
-  //   cloudClone5.rotationQuaternion = null;
-  //   cloudClone5.rotation.x = 1.57;
-  //   cloudClone5.position = new BABYLON.Vector3(-1.4, -2.5, 3);
-
-  //   let cloudClone6 = cloud2.clone("cloudClone6");
-  //   cloudClone6.isVisible = true;
-  //   cloudClone6.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
-  //   cloudClone6.rotationQuaternion = null;
-  //   cloudClone6.rotation.x = 1.57;
-  //   cloudClone6.position = new BABYLON.Vector3(2.4, -2.4, 2);
-
-  //   let cloudClone7 = cloud2.clone("cloudClone7");
-  //   cloudClone7.isVisible = true;
-  //   cloudClone7.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
-  //   cloudClone7.rotationQuaternion = null;
-  //   cloudClone7.rotation.x = 1.57;
-
-  //   cloudClone7.position = new BABYLON.Vector3(0, -1.6, 1);
-
-  //   let cloudClone8 = cloud3.clone("cloudClone8");
-  //   cloudClone8.isVisible = true;
-  //   cloudClone8.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
-  //   cloudClone8.rotationQuaternion = null;
-  //   cloudClone8.rotation.x = 1.57;
-  // cloudClone8.position = new BABYLON.Vector3(-2.5, -2, 0);
-  // cloudClone8.scaling = new BABYLON.Vector3(1.5,1.5, -1.5);
-
-  //   let cloudClone9 = cloud1.clone("cloudClone9");
-  //   cloudClone9.isVisible = true;
-  //   cloudClone9.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
-  //   cloudClone9.rotationQuaternion = null;
-  //   cloudClone9.rotation.x = 1.57;
-
-  //   cloudClone9.position = new BABYLON.Vector3(0, -2.5, 1);
-
-
-
-
-
-  //LENSE SYSTEM////////////////////////////////////////////////////////////////////////
-  // const lensEmiter = BABYLON.MeshBuilder.CreateBox("lensEmiter", {
-  //   height: 0.1,
-  //   width: 0.1,
-  //   depth: 0.1,
-  // });
-  // lensEmiter.position = new BABYLON.Vector3(2, 2.25, 0);
-  // lensEmiter.isVisible = false;
-  // var lensFlareSystem = new BABYLON.LensFlareSystem(
-  //   "lensFlareSystem", //name
-  //   lensEmiter, // emitter
-  //   scene
-  // ); //size of flare,position of flare,color of flare,image of flare,lens flare system
-  // var flare00 = new BABYLON.LensFlare(
-  //   0.1,
-  //   0.6,
-  //   new BABYLON.Color3(1, 1, 1),
-  //   "flare.png",
-  //   lensFlareSystem
-
-  // );
-  // var flare01 = new BABYLON.LensFlare(
-  //   0.15,
-  //   0.8,
-  //   new BABYLON.Color3(0.5, 0.5, 1),
-  //   "flare.png",
-  //   lensFlareSystem
-  // );
-  // var flare02 = new BABYLON.LensFlare(
-  //   0.2,
-  //   1,
-  //   new BABYLON.Color3(1, 1, 1),
-  //   "flare.png",
-  //   lensFlareSystem
-  // );
-  // var flare03 = new BABYLON.LensFlare(
-  //   0.25,
-  //   1.2,
-  //   new BABYLON.Color3(0.5, 0.5, 1),
-  //   "flare.png",
-  //   lensFlareSystem
-
-  // );
-  // var flare04 = new BABYLON.LensFlare(
-  //   0.3,
-  //   1.4,
-  //   new BABYLON.Color3(1, 1, 1),
-  //   "flare.png",
-  //   lensFlareSystem
-  // );
-
-
-  // var flare05 = new BABYLON.LensFlare(
-  //   0.2,
-  //   1.0,
-  //   new BABYLON.Color3(1, 1, 1),
-  //   "flare.png",
-  //   lensFlareSystem
-  // );
 
   //MENU////////////////////////////////////////////////////////////////////////
   const menuContainer = document.getElementById("menucontainer");
@@ -978,7 +720,53 @@ console.log(scene.animationGroups)
   let outerMenuOpen = false;
 
   outerColorButtonsContainer.onmouseenter = () => {
-    if (outerMenuOpen) {
+    if (!isMobile) {
+      if (outerMenuOpen) {
+        closeMenu(
+          outerColorButtonsContainer2,
+          outerArrowButton,
+          "68px",
+          outerColorButtons,
+
+          activeOuterColor
+        );
+        outerMenuOpen = false;
+      } else {
+        openMenu(
+          outerColorButtonsContainer2,
+          outerArrowButton,
+          "294px",
+          outerColorButtons
+        );
+        outerMenuOpen = true;
+      }
+
+      if (innerMenuOpen) {
+        closeMenu(
+          innerColorButtonsContainer2,
+          innerArrowButton,
+          "68px",
+          innerColorButtons,
+          activeInnerColor
+        );
+        innerMenuOpen = false;
+      }
+
+      if (textileMenuOpen) {
+        closeMenu(
+          textileButtonsContainer2,
+          textileArrowButton,
+          "68px",
+          textileButtons,
+          activeTextile
+        );
+        textileMenuOpen = false;
+      }
+    }
+  };
+
+  outerColorButtonsContainer.onmouseleave = () => {
+    if (!isMobile) {
       closeMenu(
         outerColorButtonsContainer2,
         outerArrowButton,
@@ -988,49 +776,55 @@ console.log(scene.animationGroups)
         activeOuterColor
       );
       outerMenuOpen = false;
-    } else {
-      openMenu(
-        outerColorButtonsContainer2,
-        outerArrowButton,
-        "294px",
-        outerColorButtons
-      );
-      outerMenuOpen = true;
     }
+  }
 
-    if (innerMenuOpen) {
-      closeMenu(
-        innerColorButtonsContainer2,
-        innerArrowButton,
-        "68px",
-        innerColorButtons,
-        activeInnerColor
-      );
-      innerMenuOpen = false;
+
+  outerColorButtonsContainer.onclick = () => {
+    if (isMobile) {
+      if (outerMenuOpen) {
+        closeMenu(
+          outerColorButtonsContainer2,
+          outerArrowButton,
+          "68px",
+          outerColorButtons,
+
+          activeOuterColor
+        );
+        outerMenuOpen = false;
+      } else {
+        openMenu(
+          outerColorButtonsContainer2,
+          outerArrowButton,
+          "294px",
+          outerColorButtons
+        );
+        outerMenuOpen = true;
+      }
+
+      if (innerMenuOpen) {
+        closeMenu(
+          innerColorButtonsContainer2,
+          innerArrowButton,
+          "68px",
+          innerColorButtons,
+          activeInnerColor
+        );
+        innerMenuOpen = false;
+      }
+
+      if (textileMenuOpen) {
+        closeMenu(
+          textileButtonsContainer2,
+          textileArrowButton,
+          "68px",
+          textileButtons,
+          activeTextile
+        );
+        textileMenuOpen = false;
+      }
+
     }
-
-    if (textileMenuOpen) {
-      closeMenu(
-        textileButtonsContainer2,
-        textileArrowButton,
-        "68px",
-        textileButtons,
-        activeTextile
-      );
-      textileMenuOpen = false;
-    }
-  };
-
-  outerColorButtonsContainer.onmouseleave = () => {
-    closeMenu(
-      outerColorButtonsContainer2,
-      outerArrowButton,
-      "68px",
-      outerColorButtons,
-
-      activeOuterColor
-    );
-    outerMenuOpen = false;
   }
   //inner color menu
   const innerColorButtons = document.getElementsByClassName(
@@ -1070,7 +864,53 @@ console.log(scene.animationGroups)
   let innerMenuOpen = false;
 
   innerColorButtonsContainer.onmouseenter = () => {
-    if (innerMenuOpen) {
+    if (!isMobile) {
+      if (innerMenuOpen) {
+        closeMenu(
+          innerColorButtonsContainer2,
+          innerArrowButton,
+          "68px",
+          innerColorButtons,
+
+          activeInnerColor
+        );
+        innerMenuOpen = false;
+      } else {
+        openMenu(
+          innerColorButtonsContainer2,
+          innerArrowButton,
+          "294px",
+          innerColorButtons
+        );
+
+        innerMenuOpen = true;
+        if (outerMenuOpen) {
+          closeMenu(
+            outerColorButtonsContainer2,
+            outerArrowButton,
+            "68px",
+            outerColorButtons,
+            activeOuterColor
+          );
+          outerMenuOpen = false;
+        }
+
+        if (textileMenuOpen) {
+          closeMenu(
+            textileButtonsContainer2,
+            textileArrowButton,
+            "68px",
+            textileButtons,
+            activeTextile
+          );
+          textileMenuOpen = false;
+        }
+      }
+    }
+  };
+
+  innerColorButtonsContainer.onmouseleave = () => {
+    if (!isMobile) {
       closeMenu(
         innerColorButtonsContainer2,
         innerArrowButton,
@@ -1080,49 +920,53 @@ console.log(scene.animationGroups)
         activeInnerColor
       );
       innerMenuOpen = false;
-    } else {
-      openMenu(
-        innerColorButtonsContainer2,
-        innerArrowButton,
-        "294px",
-        innerColorButtons
-      );
+    }
+  }
 
-      innerMenuOpen = true;
-      if (outerMenuOpen) {
+  innerColorButtonsContainer.onclick = () => {
+    if (isMobile) {
+      if (innerMenuOpen) {
         closeMenu(
-          outerColorButtonsContainer2,
-          outerArrowButton,
+          innerColorButtonsContainer2,
+          innerArrowButton,
           "68px",
-          outerColorButtons,
-          activeOuterColor
-        );
-        outerMenuOpen = false;
-      }
+          innerColorButtons,
 
-      if (textileMenuOpen) {
-        closeMenu(
-          textileButtonsContainer2,
-          textileArrowButton,
-          "68px",
-          textileButtons,
-          activeTextile
+          activeInnerColor
         );
-        textileMenuOpen = false;
+        innerMenuOpen = false;
+      } else {
+        openMenu(
+          innerColorButtonsContainer2,
+          innerArrowButton,
+          "294px",
+          innerColorButtons
+        );
+
+        innerMenuOpen = true;
+        if (outerMenuOpen) {
+          closeMenu(
+            outerColorButtonsContainer2,
+            outerArrowButton,
+            "68px",
+            outerColorButtons,
+            activeOuterColor
+          );
+          outerMenuOpen = false;
+        }
+
+        if (textileMenuOpen) {
+          closeMenu(
+            textileButtonsContainer2,
+            textileArrowButton,
+            "68px",
+            textileButtons,
+            activeTextile
+          );
+          textileMenuOpen = false;
+        }
       }
     }
-  };
-
-  innerColorButtonsContainer.onmouseleave = () => {
-    closeMenu(
-      innerColorButtonsContainer2,
-      innerArrowButton,
-      "68px",
-      innerColorButtons,
-
-      activeInnerColor
-    );
-    innerMenuOpen = false;
   }
 
   //textile menu
@@ -1190,9 +1034,6 @@ console.log(scene.animationGroups)
           scene.getMaterialByName("InnerColor(Stripes)").useLightmapAsShadowmap = true;
           scene.getMaterialByName("Outer Color(Stripes)").useLightmapAsShadowmap = true;
         }, 385);//half of the animation time
-
-
-
       }
     });
 
@@ -1205,36 +1046,8 @@ console.log(scene.animationGroups)
   let textileMenuOpen = false;
 
   textileButtonsContainer.onmouseenter = () => {
-    if (textileMenuOpen) {
-      closeMenu(
-        textileButtonsContainer2,
-        textileArrowButton,
-        "68px",
-        textileButtons,
-        activeTextile
-      );
-      textileMenuOpen = false;
-    } else {
-      openMenu(
-        textileButtonsContainer2,
-        textileArrowButton,
-        "145px",
-        textileButtons
-      );
-
-      textileMenuOpen = true;
-      if (outerMenuOpen) {
-        closeMenu(
-          outerColorButtonsContainer2,
-          outerArrowButton,
-          "68px",
-          outerColorButtons,
-          activeOuterColor
-        );
-        outerMenuOpen = false;
-      }
-
-      if (innerMenuOpen) {
+    if (!isMobile) {
+      if (textileMenuOpen) {
         closeMenu(
           textileButtonsContainer2,
           textileArrowButton,
@@ -1243,68 +1056,102 @@ console.log(scene.animationGroups)
           activeTextile
         );
         textileMenuOpen = false;
+      } else {
+        openMenu(
+          textileButtonsContainer2,
+          textileArrowButton,
+          "145px",
+          textileButtons
+        );
+
+        textileMenuOpen = true;
+        if (outerMenuOpen) {
+          closeMenu(
+            outerColorButtonsContainer2,
+            outerArrowButton,
+            "68px",
+            outerColorButtons,
+            activeOuterColor
+          );
+          outerMenuOpen = false;
+        }
+
+        if (innerMenuOpen) {
+          closeMenu(
+            innerColorButtonsContainer2,
+            innerArrowButton,
+            "68px",
+            innerColorButtons,
+            activeInnerColor
+          );
+          innerMenuOpen = false;
+        }
       }
     }
   };
 
   textileButtonsContainer.onmouseleave = () => {
-    closeMenu(
-      textileButtonsContainer2,
-      textileArrowButton,
-      "68px",
-      textileButtons,
-      activeTextile
-    );
-    textileMenuOpen = false;
+    if (!isMobile) {
+      closeMenu(
+        textileButtonsContainer2,
+        textileArrowButton,
+        "68px",
+        textileButtons,
+        activeTextile
+      );
+      textileMenuOpen = false;
+    }
   }
-  //PARTICLES MESHES //////////////////////////////////////////////////////////////////////////
-  // let particles = result[3].meshes[0]
-  // scene.getAnimationGroupByName("Scene").speedRatio = 0.5
-  // particles.position = new BABYLON.Vector3(0, 0, 3);
-  // particles.scaling = new BABYLON.Vector3(1, 1, 1);
-  //   particles.rotationQuaternion = null;
-  // particles.rotation.z = 0;
 
-  // // particles.rotation.y = Math.PI;
-  // let particlesArray = [];
-  // for (let i = 0; i < 18; i++) {
-  //   let particle = particles.clone("particle" + i);
-  //   particle.rotation.z = i;
-  //   // scene.addMesh(particle);
-  //   particlesArray.push(particle);
-  // }
-  // //levo
-  // particlesArray[0].position = new BABYLON.Vector3(-1, 1, 1);
-  // particlesArray[7].position = new BABYLON.Vector3(-1.3, 1.2, 1);
-  // particlesArray[2].position = new BABYLON.Vector3(-1.2, 1.5, 1);
-  // particlesArray[9].position = new BABYLON.Vector3(-1.1, 1.7, 1);
-  // particlesArray[4].position = new BABYLON.Vector3(-1.3, 1.9, 1);
-  // particlesArray[11].position = new BABYLON.Vector3(-1.2, 2.1, 1);
+  textileButtonsContainer.onclick = () => {
+    if (isMobile) {
+      if (textileMenuOpen) {
+        closeMenu(
+          textileButtonsContainer2,
+          textileArrowButton,
+          "68px",
+          textileButtons,
+          activeTextile
+        );
+        textileMenuOpen = false;
+      } else {
+        openMenu(
+          textileButtonsContainer2,
+          textileArrowButton,
+          "145px",
+          textileButtons
+        );
 
-  // //desno  
-  // particlesArray[6].position = new BABYLON.Vector3(1, 1, 1);
-  // particlesArray[1].position = new BABYLON.Vector3(1.3, 1.2, 1);
-  // particlesArray[8].position = new BABYLON.Vector3(1.2, 1.5, 1);
-  // particlesArray[3].position = new BABYLON.Vector3(1.1, 1.7, 1);
-  // particlesArray[10].position = new BABYLON.Vector3(1.3, 1.9, 1);
-  // particlesArray[5].position = new BABYLON.Vector3(1.2, 2.1, 1);
+        textileMenuOpen = true;
+        if (outerMenuOpen) {
+          closeMenu(
+            outerColorButtonsContainer2,
+            outerArrowButton,
+            "68px",
+            outerColorButtons,
+            activeOuterColor
+          );
+          outerMenuOpen = false;
+        }
 
-  // //sredina
-  // particlesArray[12].position = new BABYLON.Vector3(0, 1, 1);
-  // particlesArray[13].position = new BABYLON.Vector3(0.3, 1.2, 1);
-  // particlesArray[14].position = new BABYLON.Vector3(0.2, 1.5, 1);
-  // particlesArray[15].position = new BABYLON.Vector3(0.1, 1.7, 1);
-  // particlesArray[16].position = new BABYLON.Vector3(0.3, 1.9, 1);
-  // particlesArray[17].position = new BABYLON.Vector3(0.2, 2.1, 1);
-
-  
-  
-
+        if (innerMenuOpen) {
+          closeMenu(
+            innerColorButtonsContainer2,
+            innerArrowButton,
+            "68px",
+            innerColorButtons,
+            activeInnerColor
+          );
+          innerMenuOpen = false;
+        }
+      }
+    }
+  }
 
   //PARTICLE SYSTEM////////////////////////////////////////////////////////////////////////
   var fountain = BABYLON.Mesh.CreateBox("foutain", 0.1, scene);
   fountain.visibility = 0;
-  fountain.position = new BABYLON.Vector3(-1.5,0, 10);
+  fountain.position = new BABYLON.Vector3(-1.5, 0, 10);
   fountain.rotation = new BABYLON.Vector3(0, 0, -0.7);
 
   // Create a particle system
@@ -1320,11 +1167,11 @@ console.log(scene.animationGroups)
       particleSystem = new BABYLON.GPUParticleSystem("particles", { capacity: 2000 }, scene);
       particleSystem.activeParticleCount = 2000;
       particleSystem.emitRate = 2000;
-      console.log("GPU version");
+      // console.log("GPU version");
     } else {
       particleSystem = new BABYLON.ParticleSystem("particles", 1000, scene);
       particleSystem.emitRate = 1000;
-      console.log("CPU version");
+      // console.log("CPU version");
     }
 
     particleSystem.particleEmitterType = new BABYLON.SphereDirectedParticleEmitter(9);
@@ -1358,55 +1205,55 @@ console.log(scene.animationGroups)
     // particleSystem.addSizeGradient(0, 0.01, 0.02); //size range at start of particle lifetime
     // particleSystem.addSizeGradient(1.0, 0.05, 0.1); //size range at end of particle lifetime
 
-        // increasing then decreasing size over lifetime
-      //   for (let i = 0; i <= 2; i += 0.05) {
-      //     particleSystem.addSizeGradient(i / 2, 0.5 * (1 - (i - 1) * (i - 1)));
-      // }
+    // increasing then decreasing size over lifetime
+    //   for (let i = 0; i <= 2; i += 0.05) {
+    //     particleSystem.addSizeGradient(i / 2, 0.5 * (1 - (i - 1) * (i - 1)));
+    // }
 
-      particleSystem.addColorGradient(0, new BABYLON.Color4(0.5, 0.5, 0.5, 1)); //color at start of particle lifetime
+    particleSystem.addColorGradient(0, new BABYLON.Color4(0.5, 0.5, 0.5, 1)); //color at start of particle lifetime
 
-      particleSystem.addColorGradient(0.09, new BABYLON.Color4(1, 1, 1, 1)); //color at start of particle lifetime
-      particleSystem.addColorGradient(0.1, new BABYLON.Color4(0.1, 0.1, 0.1, 1)); //color at 2/5 of particle lifetime
-      particleSystem.addColorGradient(0.11, new BABYLON.Color4(1, 1, 1, 1)); //color at 2/5 of particle lifetime
+    particleSystem.addColorGradient(0.09, new BABYLON.Color4(1, 1, 1, 1)); //color at start of particle lifetime
+    particleSystem.addColorGradient(0.1, new BABYLON.Color4(0.1, 0.1, 0.1, 1)); //color at 2/5 of particle lifetime
+    particleSystem.addColorGradient(0.11, new BABYLON.Color4(1, 1, 1, 1)); //color at 2/5 of particle lifetime
 
-      particleSystem.addColorGradient(0.19, new BABYLON.Color4(1, 1, 1, 1)); //color at start of particle lifetime
-      particleSystem.addColorGradient(0.2, new BABYLON.Color4(0.1, 0.1, 0.1, 1)); //color at 2/5 of particle lifetime
-      particleSystem.addColorGradient(0.21, new BABYLON.Color4(1, 1, 1, 1)); //color at 2/5 of particle lifetime
+    particleSystem.addColorGradient(0.19, new BABYLON.Color4(1, 1, 1, 1)); //color at start of particle lifetime
+    particleSystem.addColorGradient(0.2, new BABYLON.Color4(0.1, 0.1, 0.1, 1)); //color at 2/5 of particle lifetime
+    particleSystem.addColorGradient(0.21, new BABYLON.Color4(1, 1, 1, 1)); //color at 2/5 of particle lifetime
 
-      particleSystem.addColorGradient(0.29, new BABYLON.Color4(1, 1, 1, 1)); //color at start of particle lifetime
-      particleSystem.addColorGradient(0.3, new BABYLON.Color4(0.1, 0.1, 0.1, 1)); //color at 2/5 of particle lifetime
-      particleSystem.addColorGradient(0.31, new BABYLON.Color4(1, 1, 1, 1)); //color at 2/5 of particle lifetime
+    particleSystem.addColorGradient(0.29, new BABYLON.Color4(1, 1, 1, 1)); //color at start of particle lifetime
+    particleSystem.addColorGradient(0.3, new BABYLON.Color4(0.1, 0.1, 0.1, 1)); //color at 2/5 of particle lifetime
+    particleSystem.addColorGradient(0.31, new BABYLON.Color4(1, 1, 1, 1)); //color at 2/5 of particle lifetime
 
-      particleSystem.addColorGradient(0.39, new BABYLON.Color4(1, 1, 1, 1)); //color at start of particle lifetime
-      particleSystem.addColorGradient(0.4, new BABYLON.Color4(0.1, 0.1, 0.1, 1)); //color at 2/5 of particle lifetime
-      particleSystem.addColorGradient(0.41, new BABYLON.Color4(1, 1, 1, 1)); //color at 2/5 of particle lifetime
+    particleSystem.addColorGradient(0.39, new BABYLON.Color4(1, 1, 1, 1)); //color at start of particle lifetime
+    particleSystem.addColorGradient(0.4, new BABYLON.Color4(0.1, 0.1, 0.1, 1)); //color at 2/5 of particle lifetime
+    particleSystem.addColorGradient(0.41, new BABYLON.Color4(1, 1, 1, 1)); //color at 2/5 of particle lifetime
 
-      particleSystem.addColorGradient(0.49, new BABYLON.Color4(1, 1, 1, 1)); //color at start of particle lifetime
-      particleSystem.addColorGradient(0.5, new BABYLON.Color4(0.1, 0.1, 0.1, 1)); //color at 2/5 of particle lifetime
-      particleSystem.addColorGradient(0.51, new BABYLON.Color4(1, 1, 1, 1)); //color at 2/5 of particle lifetime
+    particleSystem.addColorGradient(0.49, new BABYLON.Color4(1, 1, 1, 1)); //color at start of particle lifetime
+    particleSystem.addColorGradient(0.5, new BABYLON.Color4(0.1, 0.1, 0.1, 1)); //color at 2/5 of particle lifetime
+    particleSystem.addColorGradient(0.51, new BABYLON.Color4(1, 1, 1, 1)); //color at 2/5 of particle lifetime
 
-      
-        particleSystem.addColorGradient(0.59, new BABYLON.Color4(1, 1, 1, 1)); //color at start of particle lifetime
-      particleSystem.addColorGradient(0.6, new BABYLON.Color4(0.1, 0.1, 0.1, 1)); //color at 2/5 of particle lifetime
-      particleSystem.addColorGradient(0.61, new BABYLON.Color4(1, 1, 1, 1)); //color at 2/5 of particle lifetime
 
-      particleSystem.addColorGradient(0.69, new BABYLON.Color4(1, 1, 1, 1)); //color at start of particle lifetime
-      particleSystem.addColorGradient(0.7, new BABYLON.Color4(0.1, 0.1, 0.1, 1)); //color at 2/5 of particle lifetime
-      particleSystem.addColorGradient(0.71, new BABYLON.Color4(1, 1, 1, 1)); //color at 2/5 of particle lifetime
+    particleSystem.addColorGradient(0.59, new BABYLON.Color4(1, 1, 1, 1)); //color at start of particle lifetime
+    particleSystem.addColorGradient(0.6, new BABYLON.Color4(0.1, 0.1, 0.1, 1)); //color at 2/5 of particle lifetime
+    particleSystem.addColorGradient(0.61, new BABYLON.Color4(1, 1, 1, 1)); //color at 2/5 of particle lifetime
 
-      particleSystem.addColorGradient(0.79, new BABYLON.Color4(1, 1, 1, 1)); //color at start of particle lifetime
-      particleSystem.addColorGradient(0.8, new BABYLON.Color4(0.1, 0.1, 0.1, 1)); //color at 2/5 of particle lifetime
-      particleSystem.addColorGradient(0.81, new BABYLON.Color4(1, 1, 1, 1)); //color at 2/5 of particle lifetime
+    particleSystem.addColorGradient(0.69, new BABYLON.Color4(1, 1, 1, 1)); //color at start of particle lifetime
+    particleSystem.addColorGradient(0.7, new BABYLON.Color4(0.1, 0.1, 0.1, 1)); //color at 2/5 of particle lifetime
+    particleSystem.addColorGradient(0.71, new BABYLON.Color4(1, 1, 1, 1)); //color at 2/5 of particle lifetime
 
-      particleSystem.addColorGradient(0.89, new BABYLON.Color4(1, 1, 1, 1)); //color at start of particle lifetime
-      particleSystem.addColorGradient(0.9, new BABYLON.Color4(0.1, 0.1, 0.1, 1)); //color at 2/5 of particle lifetime
-      particleSystem.addColorGradient(0.91, new BABYLON.Color4(1, 1, 1, 1)); //color at 2/5 of particle lifetime
+    particleSystem.addColorGradient(0.79, new BABYLON.Color4(1, 1, 1, 1)); //color at start of particle lifetime
+    particleSystem.addColorGradient(0.8, new BABYLON.Color4(0.1, 0.1, 0.1, 1)); //color at 2/5 of particle lifetime
+    particleSystem.addColorGradient(0.81, new BABYLON.Color4(1, 1, 1, 1)); //color at 2/5 of particle lifetime
 
-      particleSystem.addColorGradient(1, new BABYLON.Color4(0.5, 0.5, 0.5, 1)); //color at end of particle lifetime
+    particleSystem.addColorGradient(0.89, new BABYLON.Color4(1, 1, 1, 1)); //color at start of particle lifetime
+    particleSystem.addColorGradient(0.9, new BABYLON.Color4(0.1, 0.1, 0.1, 1)); //color at 2/5 of particle lifetime
+    particleSystem.addColorGradient(0.91, new BABYLON.Color4(1, 1, 1, 1)); //color at 2/5 of particle lifetime
+
+    particleSystem.addColorGradient(1, new BABYLON.Color4(0.5, 0.5, 0.5, 1)); //color at end of particle lifetime
 
   }
 
-  
+
 
   createNewSystem();
   setTimeout(() => {
