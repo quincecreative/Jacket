@@ -228,6 +228,7 @@ var createScene = async function () {
   let shadowPlane = BABYLON.MeshBuilder.CreateBox("shadowPlane", { width: 0.3, height: 0.3, depth: 0.01 }, scene);
   shadowPlane.position = new BABYLON.Vector3(-0.1, 1, 0);
   shadowPlane.rotation.x = Math.PI / 2;
+  shadowPlane.isVisible = false;
 
   let cameraAnimation = scene.getAnimationGroupByName("KameraAnimacija")
   let lightRaysAnimation = scene.getAnimationGroupByName("Take 001")
