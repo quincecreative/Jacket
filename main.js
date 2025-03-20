@@ -1,6 +1,7 @@
 //DEVICE ORIENTATION////////////////////////////////////////////////////////////////////////
 const isMobile = window.matchMedia('(pointer: coarse)').matches;
 
+
 //ROTATE ANIMATION////////////////////////////////////////////////////////////////////////
 let rotateY;
 function createRotateYAnimation() {
@@ -129,9 +130,10 @@ window.onbeforeunload = function () {
 
 //loading screen
 const loadingScreen = document.getElementById("customLoadingScreenDiv");
-loadingScreen.style.opacity = 1;
 
 var canvas = document.getElementById("renderCanvas");
+canvas.style.touchAction = "auto"
+// isMobile ? canvas.style.touchAction = "auto" : canvas.style.touchAction = "none";
 
 var startRenderLoop = function (engine, canvas) {
   engine.runRenderLoop(function () {
@@ -159,6 +161,7 @@ var createDefaultEngine = function () {
     preserveDrawingBuffer: true,
     stencil: true,
     disableWebGL2Support: false,
+    doNotHandleTouchAction: isMobile //handle touch action if touch not to be able
   });
 };
 var createScene = async function () {
@@ -301,6 +304,8 @@ var createScene = async function () {
   cameraAnimation.pause();
 
   //ROTATION OF MESH/////////////////////////////////////////////////////////////////
+
+
   var clicked = false;
   var currentPosition = { x: 0, y: 0 };
   var currentRotation = { x: 0, y: 0 };
@@ -317,73 +322,82 @@ var createScene = async function () {
 
   scene.afterRender = function () {
     updateScroll();
-    //set mousemov as false everytime before the rendering a frame
-    mousemov = false;
-    //we are checking if the mouse is moved after the rendering a frame
-    //will return false if the mouse is not moved in the last frame
-    //possible drop of 1 frame of animation, which will not be noticed
-    //by the user most of the time
-    if (!mousemov && framecount < mxframecount) {
-      //console.log(lastAngleDiff);
-      //divide the lastAngleDiff to slow or ease the animation
-      lastAngleDiff.x = lastAngleDiff.x / 1.1;
-      lastAngleDiff.y = lastAngleDiff.y / 1.1;
-      //apply the rotation
-      jacketRoot.rotation.x += lastAngleDiff.x;
-      // jacketRoot.rotation.y += lastAngleDiff.y
-      //increase the framecount by 1
 
-      //this doesnt make sense right now as it resets
-      //after reaching max and continues in the loop
-      //thinking of a way to fix it
-      framecount++;
+    if (!isMobile) {
+      //set mousemov as false everytime before the rendering a frame
+      mousemov = false;
+      //we are checking if the mouse is moved after the rendering a frame
+      //will return false if the mouse is not moved in the last frame
+      //possible drop of 1 frame of animation, which will not be noticed
+      //by the user most of the time
+      if (!mousemov && framecount < mxframecount) {
+        //console.log(lastAngleDiff);
+        //divide the lastAngleDiff to slow or ease the animation
+        lastAngleDiff.x = lastAngleDiff.x / 1.1;
+        lastAngleDiff.y = lastAngleDiff.y / 1.1;
+        //apply the rotation
+        jacketRoot.rotation.x += lastAngleDiff.x;
+        // jacketRoot.rotation.y += lastAngleDiff.y
+        //increase the framecount by 1
 
-      currentRotation.x = jacketRoot.rotation.x;
-      // currentRotation.y = jacketRoot.rotation.y;
-    } else if (framecount >= mxframecount) {
-      framecount = 0;
+        //this doesnt make sense right now as it resets
+        //after reaching max and continues in the loop
+        //thinking of a way to fix it
+        framecount++;
+
+        currentRotation.x = jacketRoot.rotation.x;
+        // currentRotation.y = jacketRoot.rotation.y;
+      } else if (framecount >= mxframecount) {
+        framecount = 0;
+      }
+
     }
+  
   };
 
-  canvas.addEventListener("pointerdown", function (evt) {
-    scene.getAnimationGroupByName("slingShotToPositionAnimationGroup").stop();//stop slinshot animation
-    currentPosition.x = evt.clientX;
-    // currentPosition.y = evt.clientY;
-    currentRotation.x = jacketRoot.rotation.x;
-    // currentRotation.y = jacketRoot.rotation.y;
-    clicked = true;
-  });
+  if (!isMobile) {
 
-  canvas.addEventListener("pointermove", function (evt) {
-    if (clicked) {
-      //set mousemov as true if the pointer is still down and moved
-      mousemov = true;
-    }
-    if (!clicked) {
-      return;
-    }
-    //set last angle before changing the rotation
-    oldAngle.x = jacketRoot.rotation.x;
-    // oldAngle.y = jacketRoot.rotation.y;
-    //rotate the mesh
-    jacketRoot.rotation.y -= (evt.clientX - currentPosition.x) / 300.0;
+    canvas.addEventListener("pointerdown", function (evt) {
+      scene.getAnimationGroupByName("slingShotToPositionAnimationGroup").stop();//stop slinshot animation
+      currentPosition.x = evt.clientX;
+      // currentPosition.y = evt.clientY;
+      currentRotation.x = jacketRoot.rotation.x;
+      // currentRotation.y = jacketRoot.rotation.y;
+      clicked = true;
+    });
 
-    //jacketRoot.rotation.x -= (evt.clientY - currentPosition.y) / 300.0;
-    //set the current angle after the rotation
+    canvas.addEventListener("pointermove", function (evt) {
+      if (clicked) {
+        //set mousemov as true if the pointer is still down and moved
+        mousemov = true;
+      }
+      if (!clicked) {
+        return;
+      }
+      //set last angle before changing the rotation
+      oldAngle.x = jacketRoot.rotation.x;
+      // oldAngle.y = jacketRoot.rotation.y;
+      //rotate the mesh
+      jacketRoot.rotation.y -= (evt.clientX - currentPosition.x) / 300.0;
 
-    newAngle.x = jacketRoot.rotation.x;
-    // newAngle.y = jacketRoot.rotation.y;
-    //calculate the anglediff
-    lastAngleDiff.x = newAngle.x - oldAngle.x;
-    lastAngleDiff.y = newAngle.y - oldAngle.y;
-    currentPosition.x = evt.clientX;
-    // currentPosition.y = evt.clientY;
-  });
+      //jacketRoot.rotation.x -= (evt.clientY - currentPosition.y) / 300.0;
+      //set the current angle after the rotation
 
-  canvas.addEventListener("pointerup", function (evt) {
-    clicked = false;
-    startSlingShotAnimation(jacketRoot);
-  });
+      newAngle.x = jacketRoot.rotation.x;
+      // newAngle.y = jacketRoot.rotation.y;
+      //calculate the anglediff
+      lastAngleDiff.x = newAngle.x - oldAngle.x;
+      lastAngleDiff.y = newAngle.y - oldAngle.y;
+      currentPosition.x = evt.clientX;
+      // currentPosition.y = evt.clientY;
+    });
+
+    canvas.addEventListener("pointerup", function (evt) {
+      clicked = false;
+      startSlingShotAnimation(jacketRoot);
+    });
+
+  }
 
   //LIGHTS////////////////////////////////////////////////////////////////////////
 
@@ -541,7 +555,7 @@ var createScene = async function () {
   backgroundLight.rotation.y = 1.2;
 
   //MENU////////////////////////////////////////////////////////////////////////
-  
+
   const outerColorButtonsContainer2 = document.getElementById(
     "outerColorButtonsContainer2"
   );

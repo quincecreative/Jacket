@@ -438,7 +438,6 @@ box-sizing: border-box;
   width: 100%;
   border-top: 1px solid #505050;
   font-weight: 600;
-
   font-size: 18px;
   color: #505050;
 }
@@ -457,6 +456,7 @@ box-sizing: border-box;
   width: 100dvw;
   height: 100dvh;
   touch-action: none;
+  /* touch-action: auto !important; */
   outline: none !important;
   position: fixed;
   top: 0;
