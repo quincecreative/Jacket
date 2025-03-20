@@ -2,7 +2,6 @@
 const isMobile = window.matchMedia('(pointer: coarse)').matches;
 
 //ROTATE ANIMATION////////////////////////////////////////////////////////////////////////
-////animacija za rotiranje jakne kad promenis boju
 let rotateY;
 function createRotateYAnimation() {
   rotateY = new BABYLON.Animation(
@@ -150,11 +149,6 @@ BABYLON.DefaultLoadingScreen.prototype.displayLoadingUI = function () {
     return;
   }
 };
-BABYLON.DefaultLoadingScreen.prototype.hideLoadingUI = function () {
-  // loadingPage.remove();
-  // document.getElementById('customLoadingScreenDiv').style.display = 'none';
-  // document.getElementById("scrollTo").style.opacity = 1;
-};
 //end of loading
 
 var engine = null;
@@ -172,15 +166,9 @@ var createScene = async function () {
   engine.displayLoadingUI();
   // This creates a basic Babylon Scene object (non-mesh)
   var scene = new BABYLON.Scene(engine);
-  // scene.clearColor = new BABYLON.Color4(0, 0, 0, 0);
-  // scene.clearColor = BABYLON.Color3.FromHexString("#ffffff");
-  // scene.clearColor = BABYLON.Color3.FromHexString("#93939e");//#C3C3CF//#3d4960
   scene.clearColor = BABYLON.Color3.FromHexString("#C3C3CF");
-  // scene.clearColor = BABYLON.Color3.FromHexString("#3d4960");
+
   //BABYLON CAMERA////////////////////////////////////////////////////////////////////////
-  //camera starting position to try to match blender camera
-  // let satrtingPosX = 0; //0.03
-  // let satrtingPosY = 1.3; //0.95
   var camera = new BABYLON.ArcRotateCamera(
     "Camera",
     0,
@@ -227,6 +215,9 @@ var createScene = async function () {
   ]);
 
   let jacketRoot = result[0].meshes[0];
+
+  jacketRoot.position = new BABYLON.Vector3(0.05, 0, 0);
+
 
   //SET MESHES////////////////////////////////////////////////////////////////////////
   jacketRoot.rotationQuaternion = null;
@@ -298,20 +289,17 @@ var createScene = async function () {
   //set beaige inner material
   scene.getMaterialByName("InnerColor(Stripes)").albedoColor = new BABYLON.Color3.FromHexString("#615e4e");//#757261
 
-  // set white outer material
-  // scene.getMaterialByName("Outer Color(Stripes)").albedoColor =  new BABYLON.Color3.FromHexString("#808080");//#8a8a8a
-
-
   //BLENDER CAMERA////////////////////////////////////////////////////////////////////////
   //.position.clone()
   scene.activeCamera = scene.cameras[1];
   scene.activeCamera.fov = 0.45;
+  if (window.innerWidth < 500) {
+    scene.activeCamera.fov = 0.7;
+  }
 
-  // scene.activeCamera.attachControl(canvas, true);
   cameraAnimation.pause();
 
   //ROTATION OF MESH/////////////////////////////////////////////////////////////////
-
   var clicked = false;
   var currentPosition = { x: 0, y: 0 };
   var currentRotation = { x: 0, y: 0 };
@@ -325,11 +313,6 @@ var createScene = async function () {
   //framecount reset and max framecount(secs) for inertia
   var framecount = 0;
   var mxframecount = 120; //4 secs at 60 fps
-
-  // scene.beforeRender = function () {
-  //   //set mousemov as false everytime before the rendering a frame
-  //   mousemov = false;
-  // };
 
   scene.afterRender = function () {
     updateScroll();
@@ -422,7 +405,6 @@ var createScene = async function () {
 
   const light2 = new BABYLON.PointLight("light2", light2Pos, scene);
   light2.diffuse = new BABYLON.Color3(1, 0.8, 0.7);
-  // light2.diffuse = BABYLON.Color3.FromHexString("#fffece");
   light2.specular = new BABYLON.Color3(1, 0.8, -0.6);
   light2.intensity = 3;//3.9
 
@@ -433,101 +415,11 @@ var createScene = async function () {
   );
 
   scene.environmentTexture.rotationY = 0;
-  scene.environmentIntensity = 1.5; //1.3.
+  scene.environmentIntensity = 1.5;
 
-
-
-  //SHADOWS////////////////////////////////////////////////////////////////////////
-  //   // SHADOWS
-  //   var shadowGenerator = new BABYLON.ShadowGenerator(128, dirLight);
-  //   shadowGenerator.useBlurExponentialShadowMap = true;
-  //   shadowGenerator.useKernelBlur = true;
-  //   shadowGenerator.blurKernel = 16;
-  //   shadowGenerator.setDarkness(0.8);
-
-  //   var ground = BABYLON.MeshBuilder.CreateGround(
-  //     "ground",
-  //     { width: 10, height: 10 },
-  //     scene
-  //   );
-  //   ground.position = new BABYLON.Vector3(0, 0.3, 0)
-  // ground.receiveShadows = true;
-  // ground.material = new BABYLON.ShadowOnlyMaterial('mat', scene)
-
-  //   for (let i = 0; i < result[0].meshes.length; i++) {
-  //     shadowGenerator.addShadowCaster(result[0].meshes[i], true);
-  //   }
-
-  //   shadowGenerator.addShadowCaster(shadowPlane, true);
-
-
-  // var ground01 = BABYLON.MeshBuilder.CreateCylinder("cylinder", {height: 0.01, diameter: 100});
-  // ground01.position = new BABYLON.Vector3(-0.05, 0.2, 0);
-  // // ground01.addRotation(0.1, 0, 0);
-
-  // var groundMaterial = new BABYLON.PBRMaterial("pbr", scene);
-  // groundMaterial.reflectionTexture = new BABYLON.MirrorTexture("mirror", 1024, scene, true);
-  // groundMaterial.reflectionTexture.mirrorPlane = new BABYLON.Plane(0, -1.0, 0, 0.5);
-  // groundMaterial.reflectionTexture.level = 0.6;
-  // groundMaterial.reflectionTexture.adaptiveBlurKernel =64;
-
-  // ground01.material = groundMaterial;
-
-  //   var mirror = BABYLON.Mesh.CreateBox("Mirror", 1.0, scene);
-  //   mirror.scaling = new BABYLON.Vector3(100.0, 0.01, 100.0);
-  //   mirror.material = new BABYLON.StandardMaterial("mirror", scene);
-  //   mirror.material.reflectionTexture = new BABYLON.MirrorTexture("mirror", 1024, scene, true);
-  //   mirror.material.reflectionTexture.mirrorPlane = new BABYLON.Plane(0, -1.0, 0, 0.5);
-  //   // mirror.material.reflectionTexture.renderList = [knot];
-  //   mirror.material.reflectionTexture.level = 0.5;
-  //   mirror.material.reflectionTexture.adaptiveBlurKernel = 32;
-  // mirror.position = new BABYLON.Vector3(0, -1, 0);
-
-  //   for (let i = 0; i < result[0].meshes.length; i++) {
-  //     if (i > 0) {
-  //       mirror.material.reflectionTexture.renderList.push(result[0].meshes[i])
-  //     }
-  //   }
-
-
-  //   // var shadowGenerator = new BABYLON.ShadowGenerator(256, dirLight);
-  //   // shadowGenerator.useBlurExponentialShadowMap = true;
-  //   // shadowGenerator.useKernelBlur = true;
-  //   // shadowGenerator.blurKernel = 64;
-  //   // shadowGenerator.setDarkness(0);
-
-  // shadowGenerator.addShadowCaster(jacketRoot, true); //    add shadow caster to the first mesh
-  // shadowGenerator.addShadowCaster(shadowPlane, true);
-
-
-  //   // ground01.receiveShadows = true;
-
-  //       // // Fog
-  //       scene.fogMode = BABYLON.Scene.FOGMODE_LINEAR;
-  //       scene.fogColor = scene.clearColor;
-  //       scene.fogStart = 5.0;
-  //       scene.fogEnd = 50.0;
-  //ENVIORMENT HELPER////////////////////////////////////////////////////////////////////////
-  // var enviormentHelper = scene.createDefaultEnvironment({
-  //   enableGroundShadow: true,
-  //   skyboxSize: 1,
-  //   // cameraExposure: 0.01
-  // });
-  // enviormentHelper.setMainColor(BABYLON.Color3.FromHexString("#0f1725")); //#09224e #000000 #303b40 #0f1725
-  // enviormentHelper.ground.position.y =-1;
-  // 0f1725
   //CONTRAST AND EXPOSURE////////////////////////////////////////////////////////////////////////
-  // console.log(
-  //   scene.imageProcessingConfiguration.exposure,
-  //   scene.imageProcessingConfiguration.contrast
-  // );
-  scene.imageProcessingConfiguration.contrast = 1.7;//1.8
-  scene.imageProcessingConfiguration.exposure = 1.2;//1.2
-  // console.log(
-  //   scene.imageProcessingConfiguration.exposure,
-  //   scene.imageProcessingConfiguration.contrast
-  // );
-
+  scene.imageProcessingConfiguration.contrast = 1.7;
+  scene.imageProcessingConfiguration.exposure = 0.9;
 
   //SCROLL SETTINGS////////////////////////////////////////////////////////////////////////
   var frame = 0;
@@ -589,56 +481,49 @@ var createScene = async function () {
     }
 
     //starting zones
-    if (currentScrollPosition > 1000 && currentScrollPosition < 18000) {
-      ellipseZone.style.opacity = 0;
-      weDesignGreatFabrics.style.opacity = 0;
-      weAreCreatorsZone.style.opacity = 0;
-      producersZone.style.opacity = 0;
-    } else {
-      ellipseZone.style.opacity = 1;
-      weDesignGreatFabrics.style.opacity = 1;
-      weAreCreatorsZone.style.opacity = 0.5;
-      producersZone.style.opacity = 0.5;
-    }
+    // if (currentScrollPosition > 1000 && currentScrollPosition < 18000) {
+    //   ellipseZone.style.opacity = 0;
+    //   weDesignGreatFabrics.style.opacity = 0;
+    //   weAreCreatorsZone.style.opacity = 0;
+    //   producersZone.style.opacity = 0;
+    // } else {
+    //   ellipseZone.style.opacity = 1;
+    //   weDesignGreatFabrics.style.opacity = 1;
+    //   weAreCreatorsZone.style.opacity = 0.5;
+    //   producersZone.style.opacity = 0.5;
+    // }
 
     //textural variety
-
-    if (currentScrollPosition > 3500 && currentScrollPosition < 5000) {
-      texturalVarietyZone.style.opacity = 0.8;
-      boldPatternsZone.style.opacity = 0.8;
-    } else {
-      texturalVarietyZone.style.opacity = 0;
-      boldPatternsZone.style.opacity = 0;
-    }
+    // if (currentScrollPosition > 3500 && currentScrollPosition < 5000) {
+    //   texturalVarietyZone.style.opacity = 0.8;
+    //   boldPatternsZone.style.opacity = 0.8;
+    // } else {
+    //   texturalVarietyZone.style.opacity = 0;
+    //   boldPatternsZone.style.opacity = 0;
+    // }
 
     //color exploration
-
-
-    if (currentScrollPosition > 7000 && currentScrollPosition < 9000) {
-      colorExplorationZone.style.opacity = 0.8;
-    } else {
-      colorExplorationZone.style.opacity = 0;
-    }
+    // if (currentScrollPosition > 7000 && currentScrollPosition < 9000) {
+    //   colorExplorationZone.style.opacity = 0.8;
+    // } else {
+    //   colorExplorationZone.style.opacity = 0;
+    // }
 
     //sustainable materials
-
-
-    if (currentScrollPosition > 10500 && currentScrollPosition < 12500) {
-      sustainableMaterialsZone.style.opacity = 0.8;
-    } else {
-      sustainableMaterialsZone.style.opacity = 0;
-    }
+    // if (currentScrollPosition > 10500 && currentScrollPosition < 12500) {
+    //   sustainableMaterialsZone.style.opacity = 0.8;
+    // } else {
+    //   sustainableMaterialsZone.style.opacity = 0;
+    // }
 
     //novel fabric designs
-
-
-    if (currentScrollPosition > 14000 && currentScrollPosition < 15500) {
-      novelFabricDesignsZone.style.opacity = 0.8;
-      functionalFabricsZone.style.opacity = 0.8;
-    } else {
-      novelFabricDesignsZone.style.opacity = 0;
-      functionalFabricsZone.style.opacity = 0;
-    }
+    // if (currentScrollPosition > 14000 && currentScrollPosition < 15500) {
+    //   novelFabricDesignsZone.style.opacity = 0.8;
+    //   functionalFabricsZone.style.opacity = 0.8;
+    // } else {
+    //   novelFabricDesignsZone.style.opacity = 0;
+    //   functionalFabricsZone.style.opacity = 0;
+    // }
   }
   //call updateScroll function
   // updateScroll();
@@ -655,13 +540,7 @@ var createScene = async function () {
   backgroundLight.rotation.y = 1.2;
 
   //MENU////////////////////////////////////////////////////////////////////////
-  const menuContainer = document.getElementById("menucontainer");
-  const menuContent = document.getElementById("menuContent");
-  const outerColorContainer = document.getElementById("outerColorContainer");
-  const innerColorContainer = document.getElementById("innerColorContainer");
-  const textileContainer = document.getElementById("textileContainer");
-  const menuButtons = document.getElementsByClassName("menuButton");
-
+  
   const outerColorButtonsContainer2 = document.getElementById(
     "outerColorButtonsContainer2"
   );
@@ -1180,76 +1059,57 @@ var createScene = async function () {
     particleSystem.maxLifeTime = 5;
     particleSystem.minSize = 0.01;
     particleSystem.maxSize = 0.02;
-    // particleSystem.minEmitPower = 1;
-    // particleSystem.maxEmitPower = 3;
     particleSystem.emitter = fountain;
     particleSystem.updateSpeed = 0.2
 
-    // particleSystem.color1 = new BABYLON.Color4(0.1, 0.1, 0.1, 1);
-    // particleSystem.color2 = new BABYLON.Color4(0.5, 0.5, 0.5, 1);
-    // particleSystem.colorDead = new BABYLON.Color4(0, 0, 0.2, 0);
-
-
     particleSystem.start();
-
 
     particleSystem.minAngularSpeed = 0.7;
     particleSystem.maxAngularSpeed = 1.4;
 
     particleSystem.translationPivot = new BABYLON.Vector2(0.3, 0.3);
 
-    // particleSystem.addSizeGradient(0, 0.007, 0.008); //size range at start of particle lifetime
-    // // particleSystem.addSizeGradient(0.5, 0.007, 0.007); //size range at start of particle lifetime
-    // particleSystem.addSizeGradient(1.0, 0.1, 0.11); //size range at end of particle lifetime
 
-    // particleSystem.addSizeGradient(0, 0.01, 0.02); //size range at start of particle lifetime
-    // particleSystem.addSizeGradient(1.0, 0.05, 0.1); //size range at end of particle lifetime
+    particleSystem.addColorGradient(0, new BABYLON.Color4(0.5, 0.5, 0.5, 1));
 
-    // increasing then decreasing size over lifetime
-    //   for (let i = 0; i <= 2; i += 0.05) {
-    //     particleSystem.addSizeGradient(i / 2, 0.5 * (1 - (i - 1) * (i - 1)));
-    // }
+    particleSystem.addColorGradient(0.09, new BABYLON.Color4(1, 1, 1, 1));
+    particleSystem.addColorGradient(0.1, new BABYLON.Color4(0.1, 0.1, 0.1, 1));
+    particleSystem.addColorGradient(0.11, new BABYLON.Color4(1, 1, 1, 1));
 
-    particleSystem.addColorGradient(0, new BABYLON.Color4(0.5, 0.5, 0.5, 1)); //color at start of particle lifetime
+    particleSystem.addColorGradient(0.19, new BABYLON.Color4(1, 1, 1, 1));
+    particleSystem.addColorGradient(0.2, new BABYLON.Color4(0.1, 0.1, 0.1, 1));
+    particleSystem.addColorGradient(0.21, new BABYLON.Color4(1, 1, 1, 1));
 
-    particleSystem.addColorGradient(0.09, new BABYLON.Color4(1, 1, 1, 1)); //color at start of particle lifetime
-    particleSystem.addColorGradient(0.1, new BABYLON.Color4(0.1, 0.1, 0.1, 1)); //color at 2/5 of particle lifetime
-    particleSystem.addColorGradient(0.11, new BABYLON.Color4(1, 1, 1, 1)); //color at 2/5 of particle lifetime
+    particleSystem.addColorGradient(0.29, new BABYLON.Color4(1, 1, 1, 1));
+    particleSystem.addColorGradient(0.3, new BABYLON.Color4(0.1, 0.1, 0.1, 1));
+    particleSystem.addColorGradient(0.31, new BABYLON.Color4(1, 1, 1, 1));
 
-    particleSystem.addColorGradient(0.19, new BABYLON.Color4(1, 1, 1, 1)); //color at start of particle lifetime
-    particleSystem.addColorGradient(0.2, new BABYLON.Color4(0.1, 0.1, 0.1, 1)); //color at 2/5 of particle lifetime
-    particleSystem.addColorGradient(0.21, new BABYLON.Color4(1, 1, 1, 1)); //color at 2/5 of particle lifetime
+    particleSystem.addColorGradient(0.39, new BABYLON.Color4(1, 1, 1, 1));
+    particleSystem.addColorGradient(0.4, new BABYLON.Color4(0.1, 0.1, 0.1, 1));
+    particleSystem.addColorGradient(0.41, new BABYLON.Color4(1, 1, 1, 1));
 
-    particleSystem.addColorGradient(0.29, new BABYLON.Color4(1, 1, 1, 1)); //color at start of particle lifetime
-    particleSystem.addColorGradient(0.3, new BABYLON.Color4(0.1, 0.1, 0.1, 1)); //color at 2/5 of particle lifetime
-    particleSystem.addColorGradient(0.31, new BABYLON.Color4(1, 1, 1, 1)); //color at 2/5 of particle lifetime
-
-    particleSystem.addColorGradient(0.39, new BABYLON.Color4(1, 1, 1, 1)); //color at start of particle lifetime
-    particleSystem.addColorGradient(0.4, new BABYLON.Color4(0.1, 0.1, 0.1, 1)); //color at 2/5 of particle lifetime
-    particleSystem.addColorGradient(0.41, new BABYLON.Color4(1, 1, 1, 1)); //color at 2/5 of particle lifetime
-
-    particleSystem.addColorGradient(0.49, new BABYLON.Color4(1, 1, 1, 1)); //color at start of particle lifetime
-    particleSystem.addColorGradient(0.5, new BABYLON.Color4(0.1, 0.1, 0.1, 1)); //color at 2/5 of particle lifetime
-    particleSystem.addColorGradient(0.51, new BABYLON.Color4(1, 1, 1, 1)); //color at 2/5 of particle lifetime
+    particleSystem.addColorGradient(0.49, new BABYLON.Color4(1, 1, 1, 1));
+    particleSystem.addColorGradient(0.5, new BABYLON.Color4(0.1, 0.1, 0.1, 1));
+    particleSystem.addColorGradient(0.51, new BABYLON.Color4(1, 1, 1, 1));
 
 
-    particleSystem.addColorGradient(0.59, new BABYLON.Color4(1, 1, 1, 1)); //color at start of particle lifetime
-    particleSystem.addColorGradient(0.6, new BABYLON.Color4(0.1, 0.1, 0.1, 1)); //color at 2/5 of particle lifetime
-    particleSystem.addColorGradient(0.61, new BABYLON.Color4(1, 1, 1, 1)); //color at 2/5 of particle lifetime
+    particleSystem.addColorGradient(0.59, new BABYLON.Color4(1, 1, 1, 1));
+    particleSystem.addColorGradient(0.6, new BABYLON.Color4(0.1, 0.1, 0.1, 1));
+    particleSystem.addColorGradient(0.61, new BABYLON.Color4(1, 1, 1, 1));
 
-    particleSystem.addColorGradient(0.69, new BABYLON.Color4(1, 1, 1, 1)); //color at start of particle lifetime
-    particleSystem.addColorGradient(0.7, new BABYLON.Color4(0.1, 0.1, 0.1, 1)); //color at 2/5 of particle lifetime
-    particleSystem.addColorGradient(0.71, new BABYLON.Color4(1, 1, 1, 1)); //color at 2/5 of particle lifetime
+    particleSystem.addColorGradient(0.69, new BABYLON.Color4(1, 1, 1, 1));
+    particleSystem.addColorGradient(0.7, new BABYLON.Color4(0.1, 0.1, 0.1, 1));
+    particleSystem.addColorGradient(0.71, new BABYLON.Color4(1, 1, 1, 1));
 
-    particleSystem.addColorGradient(0.79, new BABYLON.Color4(1, 1, 1, 1)); //color at start of particle lifetime
-    particleSystem.addColorGradient(0.8, new BABYLON.Color4(0.1, 0.1, 0.1, 1)); //color at 2/5 of particle lifetime
-    particleSystem.addColorGradient(0.81, new BABYLON.Color4(1, 1, 1, 1)); //color at 2/5 of particle lifetime
+    particleSystem.addColorGradient(0.79, new BABYLON.Color4(1, 1, 1, 1));
+    particleSystem.addColorGradient(0.8, new BABYLON.Color4(0.1, 0.1, 0.1, 1));
+    particleSystem.addColorGradient(0.81, new BABYLON.Color4(1, 1, 1, 1));
 
-    particleSystem.addColorGradient(0.89, new BABYLON.Color4(1, 1, 1, 1)); //color at start of particle lifetime
-    particleSystem.addColorGradient(0.9, new BABYLON.Color4(0.1, 0.1, 0.1, 1)); //color at 2/5 of particle lifetime
-    particleSystem.addColorGradient(0.91, new BABYLON.Color4(1, 1, 1, 1)); //color at 2/5 of particle lifetime
+    particleSystem.addColorGradient(0.89, new BABYLON.Color4(1, 1, 1, 1));
+    particleSystem.addColorGradient(0.9, new BABYLON.Color4(0.1, 0.1, 0.1, 1));
+    particleSystem.addColorGradient(0.91, new BABYLON.Color4(1, 1, 1, 1));
 
-    particleSystem.addColorGradient(1, new BABYLON.Color4(0.5, 0.5, 0.5, 1)); //color at end of particle lifetime
+    particleSystem.addColorGradient(1, new BABYLON.Color4(0.5, 0.5, 0.5, 1));
 
   }
 
