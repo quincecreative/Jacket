@@ -198,7 +198,7 @@ var createScene = async function () {
           loadePercent = loadePercent.toFixed();
         }
         // loadingPercentages.innerHTML = `${loadePercent}`;
-        loadingLine.style.width = `${loadePercent}%`;
+        // loadingLine.style.width = `${loadePercent}%`;
       }
     ),
     BABYLON.SceneLoader.ImportMeshAsync(
